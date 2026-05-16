@@ -1,22 +1,32 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "system_test_report",
-  "produced_by": "/system-test",
-  "consumed_by": ["/uat", "/final-audit"],
-  "sprint_id": "S1",
-  "scenarios": [
-    {
-      "id": "ST-001",
-      "type": "performance | error_handling | boundary | security | load",
-      "nfr_ref": "",
-      "description": "",
-      "threshold": "",
-      "result": "pass | fail | skip",
-      "actual_value": "",
-      "details": "",
-      "severity_if_failed": "critical | major | minor"
-    }
-  ],
-  "verdict": "pass | fail",
-  "critical_failures": []
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/system_test_report",
+  "title": "ASES System Test Report",
+  "description": "Produced by /ases-system-test. Consumed by /ases-uat, /ases-final-audit.",
+  "type": "object",
+  "required": ["sprint_id", "executed_at", "scenarios", "verdict"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "executed_at": { "type": "string", "format": "date-time" },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "description", "threshold", "result"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^ST-\\d{3}$" },
+          "type": { "type": "string", "enum": ["performance", "error_handling", "boundary", "security", "load"] },
+          "nfr_ref": { "type": "string" },
+          "description": { "type": "string" },
+          "threshold": { "type": "string" },
+          "result": { "type": "string", "enum": ["pass", "fail", "skip"] },
+          "actual_value": { "type": "string" },
+          "details": { "type": "string" },
+          "severity_if_failed": { "type": "string", "enum": ["critical", "major", "minor"] }
+        }
+      }
+    },
+    "verdict": { "type": "string", "enum": ["pass", "fail"] },
+    "critical_failures": { "type": "array", "items": { "type": "string" } }
+  }
 }

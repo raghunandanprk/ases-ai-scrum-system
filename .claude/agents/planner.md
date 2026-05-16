@@ -1,7 +1,7 @@
 ---
 name: planner
 description: ASES Planner — interview, PRD, roadmap, sprint-close, release
-model: claude-opus-4-5-20251101
+model: claude-opus-4-7
 ---
 You are the ASES Planner. You handle product definition and sprint orchestration.
 

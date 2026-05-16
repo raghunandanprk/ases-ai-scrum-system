@@ -1,78 +1,51 @@
 {
-  "$schema": "ases/v3.0",
-  "document": "global_context",
-  "level": 1,
-  "description": "Full project history — identifier-addressed, explicit-call-only, PO-controlled",
-  "produced_by": "/ases-release",
-  "consumed_by": ["/ases-inject (by ID)", "/ases-release", "/ases-prd-update"],
-  "version": 1,
-  "project": "",
-  "created": "",
-  "last_updated": "",
-  "entries": [
-    {
-      "id": "SP-001",
-      "type": "sprint_digest | decision | tech_debt | feature | risk | carry_forward",
-      "sprint": "S1",
-      "summary": "",
-      "tags": [],
-      "date": "",
-      "full_ref": "sprints/S1/ship/sprint_summary.json"
-    },
-    {
-      "id": "DS-001",
-      "type": "decision",
-      "module_refs": [],
-      "recall_keywords": [],
-      "decision": "",
-      "rationale": "",
-      "tradeoffs": "",
-      "alternatives_considered": [],
-      "sprint": "S1",
-      "date": "",
-      "tags": [],
-      "status": "active | superseded | deferred"
-    },
-    {
-      "id": "TD-001",
-      "type": "tech_debt",
-      "description": "",
-      "severity": "major | minor",
-      "source_sprint": "S1",
-      "target_sprint": "S2",
-      "tags": [],
-      "status": "open | resolved"
-    },
-    {
-      "id": "FT-001",
-      "type": "feature",
-      "feature_id": "F-001",
-      "name": "",
-      "sprint": "S1",
-      "ac_count": 0,
-      "ac_passed": 0,
-      "date": "",
-      "tags": []
-    },
-    {
-      "id": "RI-001",
-      "type": "risk",
-      "description": "",
-      "severity": "critical | medium | low",
-      "mitigation_status": "none | partial | complete",
-      "sprint_identified": "S1",
-      "tags": [],
-      "status": "open | monitoring | resolved"
-    },
-    {
-      "id": "CF-001",
-      "type": "carry_forward",
-      "description": "",
-      "from_sprint": "S1",
-      "to_sprint": "S2",
-      "task_ref": "T-007",
-      "reason": "",
-      "tags": []
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/global_context",
+  "title": "ASES Global Context (Level 1)",
+  "description": "Full project history. Produced by /ases-release. Consumed by /ases-inject (by ID), /ases-release, /ases-prd-update.",
+  "type": "object",
+  "required": ["version", "project", "entries"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "project": { "type": "string" },
+    "created": { "type": "string", "format": "date-time" },
+    "last_updated": { "type": "string", "format": "date-time" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "tags"],
+        "properties": {
+          "id": { "type": "string", "description": "Typed ID: SP-NNN, DS-NNN, TD-NNN, FT-NNN, RI-NNN, CF-NNN" },
+          "type": { "type": "string", "enum": ["sprint_digest", "decision", "tech_debt", "feature", "risk", "carry_forward"] },
+          "sprint": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "date": { "type": "string", "format": "date-time" },
+          "summary": { "type": "string" },
+          "full_ref": { "type": "string" },
+          "module_refs": { "type": "array", "items": { "type": "string" } },
+          "recall_keywords": { "type": "array", "items": { "type": "string" } },
+          "decision": { "type": "string" },
+          "rationale": { "type": "string" },
+          "tradeoffs": { "type": "string" },
+          "alternatives_considered": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string" },
+          "verdict": { "type": "string" },
+          "description": { "type": "string" },
+          "severity": { "type": "string" },
+          "feature_id": { "type": "string" },
+          "name": { "type": "string" },
+          "ac_count": { "type": "integer" },
+          "ac_passed": { "type": "integer" },
+          "mitigation_status": { "type": "string" },
+          "from_sprint": { "type": "string" },
+          "to_sprint": { "type": "string" },
+          "task_ref": { "type": "string" },
+          "reason": { "type": "string" },
+          "source_sprint": { "type": "string" },
+          "target_sprint": { "type": "string" }
+        }
+      }
     }
-  ]
+  }
 }

@@ -1,31 +1,47 @@
 {
-  "$schema": "ases/v3.0",
-  "document": "scaffold_spec",
-  "description": "Opus-written scaffold instruction — Sonnet reads this and executes exactly",
-  "produced_by": "ases-scaffold Step A (Opus)",
-  "consumed_by": "ases-scaffold Step B (Sonnet)",
-  "tech_stack": {
-    "backend": "",
-    "frontend": "",
-    "database": "",
-    "test_framework": ""
-  },
-  "files_to_create": [
-    {
-      "path": "",
-      "type": "config | stub | init | ignore | env | readme",
-      "content": "",
-      "notes": ""
-    }
-  ],
-  "packages_to_install": [
-    {
-      "name": "",
-      "version": "",
-      "install_cmd": "",
-      "dev_only": false
-    }
-  ],
-  "verify_cmd": "",
-  "expected_verify_output": ""
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/scaffold_spec",
+  "title": "ASES Scaffold Specification",
+  "description": "Opus-written scaffold instruction. Produced by /ases-scaffold Step A (Opus). Consumed by /ases-scaffold Step B (Sonnet).",
+  "type": "object",
+  "required": ["tech_stack", "files_to_create", "verify_cmd"],
+  "properties": {
+    "tech_stack": {
+      "type": "object",
+      "properties": {
+        "backend": { "type": "string" },
+        "frontend": { "type": "string" },
+        "database": { "type": "string" },
+        "test_framework": { "type": "string" }
+      }
+    },
+    "files_to_create": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type", "content"],
+        "properties": {
+          "path": { "type": "string" },
+          "type": { "type": "string", "enum": ["config", "stub", "init", "ignore", "env", "readme"] },
+          "content": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "packages_to_install": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "install_cmd"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "install_cmd": { "type": "string" },
+          "dev_only": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "verify_cmd": { "type": "string" },
+    "expected_verify_output": { "type": "string" }
+  }
 }

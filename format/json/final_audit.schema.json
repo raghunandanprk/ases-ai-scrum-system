@@ -1,59 +1,90 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "final_audit",
-  "produced_by": "/final-audit",
-  "consumed_by": ["/release"],
-  "sprint_id": "S1",
-  "timestamp": "",
-  "lenses": {
-    "test_coverage": {
-      "total_test_cases": 0,
-      "covered": 0,
-      "uncovered": [],
-      "coverage_percent": 0,
-      "status": "pass | fail"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/final_audit",
+  "title": "ASES Final Audit",
+  "description": "Produced by /ases-final-audit. Consumed by /ases-release.",
+  "type": "object",
+  "required": ["sprint_id", "timestamp", "lenses", "findings", "verdict"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "lenses": {
+      "type": "object",
+      "required": ["test_coverage", "integration_integrity", "system_test", "uat_alignment", "spec_conformance", "risk_review"],
+      "properties": {
+        "test_coverage": {
+          "type": "object",
+          "properties": {
+            "total_test_cases": { "type": "integer" },
+            "covered": { "type": "integer" },
+            "uncovered": { "type": "array", "items": { "type": "string" } },
+            "coverage_percent": { "type": "number" },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "integration_integrity": {
+          "type": "object",
+          "properties": {
+            "scenarios_run": { "type": "integer" },
+            "scenarios_passed": { "type": "integer" },
+            "violations": { "type": "array", "items": { "type": "string" } },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "system_test": {
+          "type": "object",
+          "properties": {
+            "scenarios_run": { "type": "integer" },
+            "critical_failures": { "type": "array", "items": { "type": "string" } },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "uat_alignment": {
+          "type": "object",
+          "properties": {
+            "accepted": { "type": "integer" },
+            "conditional": { "type": "integer" },
+            "rejected": { "type": "integer" },
+            "conditional_notes_as_debt": { "type": "array", "items": { "type": "string" } },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "spec_conformance": {
+          "type": "object",
+          "properties": {
+            "files_audited": { "type": "integer" },
+            "drift_detected": { "type": "array", "items": { "type": "string" } },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        },
+        "risk_review": {
+          "type": "object",
+          "properties": {
+            "risks_encountered": { "type": "array", "items": { "type": "string" } },
+            "mitigations_applied": { "type": "array", "items": { "type": "string" } },
+            "new_risks_discovered": { "type": "array", "items": { "type": "string" } },
+            "status": { "type": "string", "enum": ["pass", "fail"] }
+          }
+        }
+      }
     },
-    "integration_integrity": {
-      "scenarios_run": 0,
-      "scenarios_passed": 0,
-      "violations": [],
-      "status": "pass | fail"
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "lens", "severity", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^FA-\\d{3}$" },
+          "lens": { "type": "string" },
+          "severity": { "type": "string", "enum": ["critical", "major", "minor", "warning"] },
+          "description": { "type": "string" },
+          "resolution": { "type": "string", "enum": ["fix_now", "carry_forward", "accept"] }
+        }
+      }
     },
-    "system_test": {
-      "scenarios_run": 0,
-      "critical_failures": [],
-      "status": "pass | fail"
-    },
-    "uat_alignment": {
-      "accepted": 0,
-      "conditional": 0,
-      "rejected": 0,
-      "conditional_notes_as_debt": [],
-      "status": "pass | fail"
-    },
-    "spec_conformance": {
-      "files_audited": 0,
-      "drift_detected": [],
-      "status": "pass | fail"
-    },
-    "risk_review": {
-      "risks_encountered": [],
-      "mitigations_applied": [],
-      "new_risks_discovered": [],
-      "status": "pass | fail"
-    }
-  },
-  "findings": [
-    {
-      "id": "FA-001",
-      "lens": "",
-      "severity": "critical | major | minor | warning",
-      "description": "",
-      "resolution": "fix_now | carry_forward | accept"
-    }
-  ],
-  "tech_debt": [],
-  "verdict": "SHIP | CONDITIONAL_SHIP | BLOCK",
-  "block_reason": "",
-  "surgical_reentry_target": ""
+    "tech_debt": { "type": "array", "items": { "type": "object" } },
+    "verdict": { "type": "string", "enum": ["SHIP", "CONDITIONAL_SHIP", "BLOCK"] },
+    "block_reason": { "type": "string" },
+    "surgical_reentry_target": { "type": "string" }
+  }
 }

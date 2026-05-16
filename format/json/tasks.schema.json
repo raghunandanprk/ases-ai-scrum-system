@@ -1,36 +1,54 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "tasks",
-  "produced_by": "/tasks",
-  "consumed_by": ["/validate", "/dev", "/critique"],
-  "sprint_id": "S1",
-  "tasks": [
-    {
-      "id": "T-001",
-      "file": "src/models/bar.py",
-      "description": "",
-      "type": "create | modify | delete | ui | integration",
-      "module_ref": "M-001",
-      "inputs": {
-        "reads_from": [],
-        "env_vars": [],
-        "services": []
-      },
-      "outputs": {
-        "exports": [],
-        "side_effects": []
-      },
-      "depends_on": [],
-      "test_case_refs": ["TC-001"],
-      "lld_ref": "",
-      "status": "pending | in_progress | complete | failed | deferred",
-      "iteration_count": 0,
-      "plan_file": "sprints/S1/T-001-plan.md",
-      "tests_file": "sprints/S1/T-001-tests.md"
-    }
-  ],
-  "execution_order": ["T-001", "T-002"],
-  "parallel_groups": [["T-003", "T-004"]],
-  "ui_tasks": ["T-005"],
-  "backend_tasks": ["T-001", "T-002", "T-003", "T-004"]
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/tasks",
+  "title": "ASES Sprint Tasks",
+  "description": "Produced by /ases-tasks. Consumed by /ases-validate, /ases-dev, /ases-critique.",
+  "type": "object",
+  "required": ["sprint_id", "tasks", "execution_order"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "file", "description", "type", "module_ref", "depends_on", "test_case_refs", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^T-\\d{3}$" },
+          "file": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string", "enum": ["create", "modify", "delete", "ui", "integration"] },
+          "module_ref": { "type": "string" },
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "reads_from": { "type": "array", "items": { "type": "string" } },
+              "env_vars": { "type": "array", "items": { "type": "string" } },
+              "services": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "outputs": {
+            "type": "object",
+            "properties": {
+              "exports": { "type": "array", "items": { "type": "string" } },
+              "side_effects": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "test_case_refs": { "type": "array", "items": { "type": "string", "pattern": "^TC-\\d{3}$" } },
+          "lld_ref": { "type": "string" },
+          "status": { "type": "string", "enum": ["pending", "in_progress", "complete", "failed", "deferred"] },
+          "iteration_count": { "type": "integer", "minimum": 0 },
+          "plan_file": { "type": "string", "description": "e.g. sprints/S1/execution/tasks/T-001-plan.md" },
+          "tests_file": { "type": "string", "description": "e.g. sprints/S1/execution/tasks/T-001-tests.md" }
+        }
+      }
+    },
+    "execution_order": { "type": "array", "items": { "type": "string", "pattern": "^T-\\d{3}$" } },
+    "parallel_groups": {
+      "type": "array",
+      "items": { "type": "array", "items": { "type": "string", "pattern": "^T-\\d{3}$" } }
+    },
+    "ui_tasks": { "type": "array", "items": { "type": "string", "pattern": "^T-\\d{3}$" } },
+    "backend_tasks": { "type": "array", "items": { "type": "string", "pattern": "^T-\\d{3}$" } }
+  }
 }

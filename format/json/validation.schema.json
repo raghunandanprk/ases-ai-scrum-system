@@ -1,32 +1,31 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "validation",
-  "produced_by": "/validate",
-  "consumed_by": ["/dev"],
-  "task_id": "T-001",
-  "checks": [
-    {
-      "check": "input_files_exist",
-      "status": "pass | fail",
-      "details": ""
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/validation",
+  "title": "ASES Pre-Dev Validation",
+  "description": "Produced by /ases-validate. Consumed by /ases-dev.",
+  "type": "object",
+  "required": ["task_id", "checks", "verdict"],
+  "properties": {
+    "task_id": { "type": "string", "pattern": "^T-\\d{3}$" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "status"],
+        "properties": {
+          "check": {
+            "type": "string",
+            "enum": ["input_files_exist", "interface_contract_intact", "scope_boundary_clear", "no_circular_dependency"]
+          },
+          "status": { "type": "string", "enum": ["pass", "fail"] },
+          "details": { "type": "string" }
+        }
+      },
+      "minItems": 4,
+      "maxItems": 4
     },
-    {
-      "check": "interface_contract_intact",
-      "status": "pass | fail",
-      "details": ""
-    },
-    {
-      "check": "scope_boundary_clear",
-      "status": "pass | fail",
-      "details": ""
-    },
-    {
-      "check": "no_circular_dependency",
-      "status": "pass | fail",
-      "details": ""
-    }
-  ],
-  "verdict": "PROCEED | HOLD",
-  "hold_reason": "",
-  "suggested_resolution": ""
+    "verdict": { "type": "string", "enum": ["PROCEED", "HOLD"] },
+    "hold_reason": { "type": "string" },
+    "suggested_resolution": { "type": "string" }
+  }
 }

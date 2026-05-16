@@ -1,16 +1,20 @@
 {
-  "$schema": "ases/v3.0",
-  "document": "context_lean",
-  "level": 3,
-  "description": "Always-loaded lean state — 8 fields maximum, never grows",
-  "produced_by": ["/ases-init", "every_stage_completion"],
-  "consumed_by": ["ases-hook.py — auto-injected every session"],
-  "project": "",
-  "sprint": "S1",
-  "phase": "PROJECT_START | SPRINT_DESIGN | SPRINT_EXECUTION | SPRINT_SHIP",
-  "stage": "",
-  "last_completed": "",
-  "next": "",
-  "blockers": [],
-  "prd_version": 1
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/context_lean",
+  "title": "ASES Lean Context (Level 3)",
+  "description": "Documents the 8 fields extracted from context.json by ases-hook.py and auto-injected into every session. These fields MUST exist in context.json with these exact names. This is NOT a separate file — it is a subset view of context.json.",
+  "type": "object",
+  "required": ["project", "sprint", "phase", "stage", "last_completed", "next", "blockers", "prd_version"],
+  "maxProperties": 8,
+  "properties": {
+    "project": { "type": "string" },
+    "sprint": { "type": "string", "pattern": "^S\\d+$" },
+    "phase": { "type": "string", "enum": ["PROJECT_START", "SPRINT_DESIGN", "SPRINT_EXECUTION", "SPRINT_SHIP"] },
+    "stage": { "type": "string" },
+    "last_completed": { "type": "string" },
+    "next": { "type": "string" },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "prd_version": { "type": "integer", "minimum": 1 }
+  },
+  "additionalProperties": false
 }

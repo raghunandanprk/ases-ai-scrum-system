@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASES v3.0 — Command Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050709;
+  --s1: #0a0d14;
+  --s2: #0e1219;
+  --s3: #121820;
+  --b1: #182030;
+  --b2: #1e2a3e;
+  --opus: #f97316;
+  --od: rgba(249,115,22,0.1);
+  --ob: rgba(249,115,22,0.22);
+  --sonnet: #22c55e;
+  --sd: rgba(34,197,94,0.1);
+  --sb: rgba(34,197,94,0.22);
+  --gemini: #3b82f6;
+  --gd: rgba(59,130,246,0.1);
+  --gb: rgba(59,130,246,0.22);
+  --human: #a78bfa;
+  --hd: rgba(167,139,250,0.1);
+  --hb: rgba(167,139,250,0.22);
+  --warn: #fbbf24;
+  --wd: rgba(251,191,36,0.08);
+  --wb: rgba(251,191,36,0.3);
+  --text: #b8cce8;
+  --dim: #4a6080;
+  --bright: #e4f0ff;
+  --muted: #2a3a52;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.5;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(24,32,48,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(24,32,48,.3) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0;}
+
+/* Topbar */
+.tb{position:sticky;top:0;z-index:100;background:rgba(5,7,9,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:50px;}
+.tb-brand{display:flex;align-items:center;gap:14px;}
+.tb-logo{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--bright);letter-spacing:-.01em;}
+.tb-logo span{color:var(--opus);}
+.tb-v{font-size:9px;color:var(--dim);border:1px solid var(--b2);padding:2px 7px;border-radius:2px;letter-spacing:.1em;}
+.tb-nav{display:flex;gap:1px;}
+.nv{padding:4px 12px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:none;border:none;cursor:pointer;border-radius:2px;transition:all .15s;text-decoration:none;display:inline-block;}
+.nv:hover{color:var(--text);background:var(--s2);}
+.tb-dots{display:flex;gap:10px;align-items:center;}
+.ag-dot{display:flex;align-items:center;gap:5px;font-size:9.5px;}
+.dot{width:5px;height:5px;border-radius:50%;animation:pulse 2.5s ease-in-out infinite;}
+.dot.o{background:var(--opus);}
+.dot.s{background:var(--sonnet);animation-delay:.6s;}
+.dot.g{background:var(--gemini);animation-delay:1.2s;}
+.dot.h{background:var(--human);animation-delay:1.8s;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* Layout */
+.pg{max-width:1440px;margin:0 auto;padding:28px;position:relative;z-index:1;}
+.sec{margin-bottom:44px;}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.sl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);white-space:nowrap;}
+.sline{flex:1;height:1px;background:var(--b1);}
+.sid{font-size:8.5px;color:var(--muted);letter-spacing:.1em;}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:44px;}
+.hero-main{background:var(--s1);border:1px solid var(--b1);border-top:3px solid var(--opus);padding:32px 36px;}
+.hero-eye{font-size:8.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.hero-title{font-family:'Syne',sans-serif;font-size:46px;font-weight:800;color:var(--bright);letter-spacing:-.03em;line-height:.92;margin-bottom:16px;}
+.hero-title em{font-style:normal;color:var(--opus);}
+.hero-desc{font-size:11px;color:var(--dim);line-height:1.8;max-width:460px;margin-bottom:24px;}
+.hero-stats{display:flex;gap:28px;}
+.stat-n{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--bright);line-height:1;}
+.stat-l{font-size:8.5px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.hero-side{display:flex;flex-direction:column;gap:2px;}
+.hero-rule{flex:1;background:var(--s1);border:1px solid var(--b1);padding:16px 20px;display:flex;flex-direction:column;justify-content:center;gap:6px;}
+.hr-n{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--muted);line-height:1;}
+.hr-t{font-size:10px;color:var(--dim);line-height:1.5;}
+
+/* Context Architecture */
+.ctx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:44px;}
+.ctx-card{background:var(--s1);border:1px solid var(--b1);padding:20px;position:relative;overflow:hidden;}
+.ctx-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.ctx-card.l3::before{background:var(--sonnet);}
+.ctx-card.l2::before{background:var(--opus);}
+.ctx-card.l1::before{background:var(--human);}
+.ctx-level{font-size:8px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;}
+.ctx-card.l3 .ctx-level{color:var(--sonnet);}
+.ctx-card.l2 .ctx-level{color:var(--opus);}
+.ctx-card.l1 .ctx-level{color:var(--human);}
+.ctx-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);margin-bottom:4px;}
+.ctx-file{font-size:9px;margin-bottom:10px;}
+.ctx-card.l3 .ctx-file{color:var(--sonnet);}
+.ctx-card.l2 .ctx-file{color:var(--opus);}
+.ctx-card.l1 .ctx-file{color:var(--human);}
+.ctx-desc{font-size:9.5px;color:var(--dim);line-height:1.6;margin-bottom:10px;}
+.ctx-tags{display:flex;flex-wrap:wrap;gap:3px;}
+.ctx-tag{font-size:8.5px;padding:2px 6px;border-radius:2px;border:1px solid;}
+.l3 .ctx-tag{background:var(--sd);border-color:var(--sb);color:var(--sonnet);}
+.l2 .ctx-tag{background:var(--od);border-color:var(--ob);color:var(--opus);}
+.l1 .ctx-tag{background:var(--hd);border-color:var(--hb);color:var(--human);}
+
+/* Global Context IDs */
+.gcid-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:44px;}
+.gcid-card{background:var(--s1);border:1px solid var(--b1);padding:14px 16px;}
+.gcid-prefix{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--human);line-height:1;margin-bottom:4px;}
+.gcid-name{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.gcid-example{font-size:8.5px;color:var(--muted);}
+
+/* Model cards */
+.model-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:44px;}
+.mc{background:var(--s1);border:1px solid var(--b1);padding:18px 20px;position:relative;overflow:hidden;}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.mc.opus::before{background:var(--opus);}
+.mc.sonnet::before{background:var(--sonnet);}
+.mc.gemini::before{background:var(--gemini);}
+.mc.human::before{background:var(--human);}
+.mc-layer{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;}
+.mc-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:4px;}
+.mc.opus .mc-name{color:var(--opus);}
+.mc.sonnet .mc-name{color:var(--sonnet);}
+.mc.gemini .mc-name{color:var(--gemini);}
+.mc.human .mc-name{color:var(--human);}
+.mc-role{font-size:9.5px;color:var(--dim);margin-bottom:12px;line-height:1.5;}
+.mc-tags{display:flex;flex-wrap:wrap;gap:3px;}
+.mc-tag{font-size:8.5px;padding:2px 6px;border-radius:2px;border:1px solid;}
+.opus .mc-tag{background:var(--od);border-color:var(--ob);color:var(--opus);}
+.sonnet .mc-tag{background:var(--sd);border-color:var(--sb);color:var(--sonnet);}
+.gemini .mc-tag{background:var(--gd);border-color:var(--gb);color:var(--gemini);}
+.human .mc-tag{background:var(--hd);border-color:var(--hb);color:var(--human);}
+
+/* Pipeline */
+.pipe-wrap{background:var(--s1);border:1px solid var(--b1);padding:24px;margin-bottom:44px;}
+.pipe-phase{margin-bottom:20px;}
+.pipe-phase:last-child{margin-bottom:0;}
+.ph-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ph-badge{font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:2px;letter-spacing:.05em;text-transform:uppercase;}
+.pb-proj{background:rgba(180,200,240,.05);border:1px solid var(--b2);color:var(--text);}
+.pb-d1{background:var(--od);border:1px solid var(--ob);color:var(--opus);}
+.pb-d2{background:var(--sd);border:1px solid var(--sb);color:var(--sonnet);}
+.pb-d3{background:var(--gd);border:1px solid var(--gb);color:var(--gemini);}
+.ph-title{font-size:10px;color:var(--dim);}
+.ph-scope{font-size:8.5px;color:var(--muted);margin-left:auto;letter-spacing:.08em;}
+.pipe-steps{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;row-gap:4px;}
+.ps{display:flex;align-items:stretch;}
+.pn{background:var(--s2);border:1px solid var(--b1);border-top:2px solid transparent;padding:9px 12px;display:flex;flex-direction:column;gap:3px;min-width:82px;cursor:default;transition:all .15s;}
+.pn:hover{background:var(--s3);border-color:var(--b2);transform:translateY(-1px);}
+.pn.on{border-top-color:var(--opus);}
+.pn.sn{border-top-color:var(--sonnet);}
+.pn.gn{border-top-color:var(--gemini);}
+.pn.hn{border-top-color:var(--human);}
+.pn.yn{border-top-color:var(--warn);border-style:dashed;}
+.pn.sys{border-top-color:var(--muted);}
+.pc{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--bright);}
+.pa{font-size:8px;letter-spacing:.05em;text-transform:uppercase;}
+.pn.on .pa{color:var(--opus);}
+.pn.sn .pa{color:var(--sonnet);}
+.pn.gn .pa{color:var(--gemini);}
+.pn.hn .pa{color:var(--human);}
+.pn.sys .pa{color:var(--dim);}
+.pg8{font-size:7.5px;color:var(--warn);}
+.parr{display:flex;align-items:center;padding:0 5px;color:var(--muted);font-size:11px;padding-bottom:4px;}
+.ploop{display:flex;align-items:center;padding:0 3px;font-size:8.5px;color:var(--warn);padding-bottom:4px;}
+
+/* Folder structure */
+.folder-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:44px;}
+.folder-card{background:var(--s1);border:1px solid var(--b1);padding:18px 20px;}
+.folder-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--bright);margin-bottom:10px;}
+.folder-desc{font-size:9.5px;color:var(--dim);margin-bottom:10px;line-height:1.5;}
+.folder-tree{font-size:9px;color:var(--dim);line-height:1.9;}
+.folder-tree .dir{color:var(--opus);}
+.folder-tree .file-j{color:var(--sonnet);}
+.folder-tree .file-m{color:var(--gemini);}
+.folder-tree .sys{color:var(--human);}
+.folder-tree .comment{color:var(--muted);}
+
+/* Gates */
+.gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:44px;}
+.gc{background:var(--s1);border:1px solid var(--b1);border-left:3px solid var(--warn);padding:14px 16px;}
+.gc-phase{font-size:7.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--warn);margin-bottom:5px;}
+.gc-trigger{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--bright);margin-bottom:4px;}
+.gc-desc{font-size:9.5px;color:var(--dim);line-height:1.5;}
+
+/* Rules */
+.rules-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:44px;}
+.rc{background:var(--s1);border:1px solid var(--b1);border-left:3px solid var(--muted);padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+.rc-n{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--muted);line-height:1;}
+.rc-t{font-size:9.5px;color:var(--dim);line-height:1.6;}
+
+/* Hook */
+.hook-card{background:var(--s1);border:1px solid var(--b1);padding:24px;margin-bottom:44px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;}
+.hk{display:flex;flex-direction:column;gap:8px;}
+.hk-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--bright);}
+.hk-desc{font-size:9.5px;color:var(--dim);line-height:1.6;}
+.hk-trigger{font-size:8.5px;color:var(--sonnet);margin-top:4px;}
+
+/* Sprint loop */
+.loop-wrap{background:var(--s1);border:1px solid var(--b1);padding:24px;margin-bottom:44px;}
+.loop-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--bright);margin-bottom:18px;}
+.loop-flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;row-gap:10px;}
+.ln{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.lb{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;padding:6px 12px;border-radius:2px;white-space:nowrap;letter-spacing:.02em;}
+.lb-o{background:var(--od);border:1px solid var(--ob);color:var(--opus);}
+.lb-s{background:var(--sd);border:1px solid var(--sb);color:var(--sonnet);}
+.lb-g{background:var(--gd);border:1px solid var(--gb);color:var(--gemini);}
+.lb-h{background:var(--hd);border:1px solid var(--hb);color:var(--human);}
+.lb-y{background:var(--wd);border:1px dashed var(--wb);color:var(--warn);}
+.lb-sys{background:var(--s2);border:1px solid var(--b2);color:var(--dim);}
+.ll{font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;}
+.larr{color:var(--muted);padding:0 4px;font-size:13px;padding-bottom:10px;}
+.lback{color:var(--warn);padding:0 3px;font-size:9px;padding-bottom:10px;}
+
+/* Footer */
+.footer{border-top:1px solid var(--b1);padding-top:20px;display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.footer-truth{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bright);}
+.footer-truth span{color:var(--opus);}
+.footer-meta{font-size:8.5px;color:var(--dim);text-align:right;line-height:2;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.sec,.hero,.model-row,.pipe-wrap,.loop-wrap,.hook-card{animation:fadeUp .35s ease both;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="tb">
+  <div class="tb-brand">
+    <div class="tb-logo">A<span>S</span>ES</div>
+    <div class="tb-v">v3.0</div>
+  </div>
+  <nav class="tb-nav">
+    <a href="#context" class="nv">Context</a>
+    <a href="#pipeline" class="nv">Pipeline</a>
+    <a href="#structure" class="nv">Structure</a>
+    <a href="#hook" class="nv">Hook</a>
+    <a href="#gates" class="nv">Gates</a>
+    <a href="#rules" class="nv">Rules</a>
+  </nav>
+  <div class="tb-dots">
+    <div class="ag-dot"><div class="dot o"></div><span style="color:var(--opus)">Opus</span></div>
+    <div class="ag-dot"><div class="dot s"></div><span style="color:var(--sonnet)">Sonnet</span></div>
+    <div class="ag-dot"><div class="dot g"></div><span style="color:var(--gemini)">Gemini</span></div>
+    <div class="ag-dot"><div class="dot h"></div><span style="color:var(--human)">PO</span></div>
+  </div>
+</div>
+
+<div class="pg">
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-eye">AI Scrum Engineering System · Claude Code Edition</div>
+    <div class="hero-title">A<em>S</em>ES<br>Command<br>Centre</div>
+    <div class="hero-desc">Three-level context architecture. CARL-inspired just-in-time injection. Identifier-addressed global history. Tight Sonnet execution contracts. Seven-category upgrade from v2.</div>
+    <div class="hero-stats">
+      <div><div class="stat-n">23</div><div class="stat-l">Commands</div></div>
+      <div><div class="stat-n">3</div><div class="stat-l">Context Levels</div></div>
+      <div><div class="stat-n">6</div><div class="stat-l">ID Prefixes</div></div>
+      <div><div class="stat-n">10</div><div class="stat-l">Hard Rules</div></div>
+    </div>
+  </div>
+  <div class="hero-side">
+    <div class="hero-rule"><div class="hr-n">A</div><div class="hr-t">Three-level context: lean (always) → sprint (active sprint) → global (explicit by ID)</div></div>
+    <div class="hero-rule"><div class="hr-n">B</div><div class="hr-t">Sonnet writes only output_files[] from task plan — no inference, no scope creep</div></div>
+    <div class="hero-rule"><div class="hr-n">C</div><div class="hr-t">scaffold_spec.json gates Sonnet execution — Opus writes spec first, every time</div></div>
+    <div class="hero-rule"><div class="hr-n">D</div><div class="hr-t">Global context identifier-addressed: /ases-inject DS-003 SP-001 injects exactly those entries</div></div>
+  </div>
+</div>
+
+<!-- Context Architecture -->
+<div id="context" class="sh"><div class="sl">Context Architecture</div><div class="sline"></div><div class="sid">THREE LEVELS · CARL-INSPIRED</div></div>
+<div class="ctx-grid" style="margin-bottom:16px;">
+  <div class="ctx-card l3">
+    <div class="ctx-level">Level 3 — Always Loaded</div>
+    <div class="ctx-name">Lean Context</div>
+    <div class="ctx-file">.ases/context.json</div>
+    <div class="ctx-desc">8 fields maximum. Auto-injected by hook into every session. Never grows. Pure state pointer.</div>
+    <div class="ctx-tags">
+      <span class="ctx-tag">project</span><span class="ctx-tag">sprint</span><span class="ctx-tag">phase</span><span class="ctx-tag">stage</span><span class="ctx-tag">last_completed</span><span class="ctx-tag">next</span><span class="ctx-tag">blockers</span><span class="ctx-tag">prd_version</span>
+    </div>
+  </div>
+  <div class="ctx-card l2">
+    <div class="ctx-level">Level 2 — Active Sprint</div>
+    <div class="ctx-name">Sprint Context</div>
+    <div class="ctx-file">.ases/sprint_context.json</div>
+    <div class="ctx-desc">Written by /ases-sprint-gate on PASS. Hook auto-loads during active sprint. Cleared on sprint close. Contains relevant_decisions[] IDs — hook resolves to full ADR text.</div>
+    <div class="ctx-tags">
+      <span class="ctx-tag">sprint_goal</span><span class="ctx-tag">features_in_scope</span><span class="ctx-tag">tasks_status</span><span class="ctx-tag">relevant_decisions</span><span class="ctx-tag">open_issues</span>
+    </div>
+  </div>
+  <div class="ctx-card l1">
+    <div class="ctx-level">Level 1 — Explicit Only</div>
+    <div class="ctx-name">Global Context</div>
+    <div class="ctx-file">.ases/global_context.json</div>
+    <div class="ctx-desc">Full project history. Identifier-addressed entries. PO-controlled. Never auto-loaded. Access via /ases-inject [IDs] or PO-facing commands only.</div>
+    <div class="ctx-tags">
+      <span class="ctx-tag">/ases-inject DS-003</span><span class="ctx-tag">/ases-inject tags:M-001</span><span class="ctx-tag">/ases-gc list</span>
+    </div>
+  </div>
+</div>
+
+<!-- Global Context IDs -->
+<div class="sh" style="margin-bottom:12px;"><div class="sl">Global Context Identifiers</div><div class="sline"></div><div class="sid">TYPED · ADDRESSABLE · PO-CONTROLLED</div></div>
+<div class="gcid-grid" style="margin-bottom:44px;">
+  <div class="gcid-card"><div class="gcid-prefix">SP-</div><div class="gcid-name">Sprint Digest</div><div class="gcid-example">SP-001 — S1 shipped<br>SP-002 — S2 blocked</div></div>
+  <div class="gcid-card"><div class="gcid-prefix">DS-</div><div class="gcid-name">Decision (ADR)</div><div class="gcid-example">DS-003 — event-driven<br>DS-007 — postgres</div></div>
+  <div class="gcid-card"><div class="gcid-prefix">TD-</div><div class="gcid-name">Tech Debt</div><div class="gcid-example">TD-001 — open S2<br>TD-004 — resolved</div></div>
+  <div class="gcid-card"><div class="gcid-prefix">FT-</div><div class="gcid-name">Feature Shipped</div><div class="gcid-example">FT-001 — F-001 4/4 AC<br>FT-003 — F-005 2/3 AC</div></div>
+  <div class="gcid-card"><div class="gcid-prefix">RI-</div><div class="gcid-name">Risk Item</div><div class="gcid-example">RI-002 — monitoring<br>RI-005 — resolved</div></div>
+  <div class="gcid-card"><div class="gcid-prefix">CF-</div><div class="gcid-name">Carry-Forward</div><div class="gcid-example">CF-001 — T-007 S1→S2<br>CF-003 — F-008 TBD</div></div>
+</div>
+
+<!-- Models -->
+<div class="sh"><div class="sl">Model Allocation</div><div class="sline"></div><div class="sid">LAYER ASSIGNMENT</div></div>
+<div class="model-row">
+  <div class="mc opus">
+    <div class="mc-layer">Reasoning Layer</div>
+    <div class="mc-name">Claude Opus 4.6</div>
+    <div class="mc-role">Planning, architecture, critique, test design, scaffold specs. All reasoning-heavy stages.</div>
+    <div class="mc-tags"><span class="mc-tag">planner</span><span class="mc-tag">architect</span><span class="mc-tag">critic</span><span class="mc-tag">tester-design</span><span class="mc-tag">task-mgr</span></div>
+  </div>
+  <div class="mc sonnet">
+    <div class="mc-layer">Execution Layer</div>
+    <div class="mc-name">Claude Sonnet</div>
+    <div class="mc-role">Code gen, fixes, test impl, scaffolding, devops. Writes only to output_files[] from plan. No inference.</div>
+    <div class="mc-tags"><span class="mc-tag">developer</span><span class="mc-tag">tester-impl</span><span class="mc-tag">scaffold-exec</span><span class="mc-tag">devops</span></div>
+  </div>
+  <div class="mc gemini">
+    <div class="mc-layer">UI Layer</div>
+    <div class="mc-name">Gemini 3.1 Pro</div>
+    <div class="mc-role">UI spec + standalone Next.js/React scaffold. Locked after creation. Sonnet touches integration_points only.</div>
+    <div class="mc-tags"><span class="mc-tag">ui-designer</span><span class="mc-tag">ui-scaffold</span></div>
+  </div>
+  <div class="mc human">
+    <div class="mc-layer">Decision Layer</div>
+    <div class="mc-name">Product Owner</div>
+    <div class="mc-role">6 mandatory gates. Manual context injection via /ases-inject. PO-only file access. UAT sign-off.</div>
+    <div class="mc-tags"><span class="mc-tag">interview</span><span class="mc-tag">roadmap</span><span class="mc-tag">uat</span><span class="mc-tag">inject</span><span class="mc-tag">release</span></div>
+  </div>
+</div>
+
+<!-- Pipeline -->
+<div id="pipeline" class="sh"><div class="sl">Full Pipeline</div><div class="sline"></div><div class="sid">23 COMMANDS · 3 PHASES</div></div>
+<div class="pipe-wrap">
+
+  <div class="pipe-phase">
+    <div class="ph-head"><div class="ph-badge pb-proj">Project Start</div><div class="ph-title">One-time initialisation</div><div class="ph-scope">scope: project</div></div>
+    <div class="pipe-steps">
+      <div class="ps"><div class="pn hn"><div class="pc">/interview</div><div class="pa">PO+Opus</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/prd</div><div class="pa">Planner</div><div class="pg8">⚑ PO</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/hld</div><div class="pa">Architect</div><div class="pg8">⚑ PO</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/roadmap</div><div class="pa">Planner</div><div class="pg8">⚑ PO ★</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn sys"><div class="pc">/init</div><div class="pa">System</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/scaffold</div><div class="pa">Opus→Sonnet</div><div class="pg8">spec→exec</div></div></div>
+    </div>
+  </div>
+
+  <div class="pipe-phase">
+    <div class="ph-head"><div class="ph-badge pb-d1">Phase 1 — Sprint Design</div><div class="ph-title">Deterministic sprint specs — runs before every sprint</div><div class="ph-scope">scope: sprint</div></div>
+    <div class="pipe-steps">
+      <div class="ps"><div class="pn on"><div class="pc">/prd-update</div><div class="pa">Planner</div><div class="pg8">optional</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/lld</div><div class="pa">Architect</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/schema</div><div class="pa">Architect</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/test-spec</div><div class="pa">Tester</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn yn"><div class="pc">/sprint-gate</div><div class="pa">Critic</div><div class="pg8">⚑ PASS+PO → writes sprint_ctx</div></div></div>
+    </div>
+  </div>
+
+  <div class="pipe-phase">
+    <div class="ph-head"><div class="ph-badge pb-d2">Phase 2 — Sprint Execution</div><div class="ph-title">Setup → UI Track → Task loop</div><div class="ph-scope">scope: sprint + task</div></div>
+    <div class="pipe-steps">
+      <div class="ps"><div class="pn on"><div class="pc">/analyze</div><div class="pa">Architect</div><div class="pg8">READY</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/sprint-scaffold</div><div class="pa">Opus→Sonnet</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/tasks</div><div class="pa">Task Mgr</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn gn"><div class="pc">/ui-design</div><div class="pa">Gemini</div><div class="pg8">if UI tasks</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/ui-review</div><div class="pa">Critic</div><div class="pg8">APPROVED</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn gn"><div class="pc">/ui-scaffold</div><div class="pa">Gemini 🔒</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/validate</div><div class="pa">Architect</div><div class="pg8">PROCEED</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn sn"><div class="pc">/dev</div><div class="pa">Sonnet</div><div class="pg8">output_files[] only</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/critique</div><div class="pa">Critic</div><div class="pg8">max×3</div></div><div class="ploop">⟳</div></div>
+      <div class="ps"><div class="pn sn"><div class="pc">/fix</div><div class="pa">Sonnet</div><div class="pg8">scope-locked</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/sprint-close</div><div class="pa">Planner</div></div></div>
+    </div>
+  </div>
+
+  <div class="pipe-phase" style="margin-bottom:0">
+    <div class="ph-head"><div class="ph-badge pb-d3">Phase 3 — Sprint Ship</div><div class="ph-title">Testing → UAT → DevOps → Audit → Release</div><div class="ph-scope">scope: sprint</div></div>
+    <div class="pipe-steps">
+      <div class="ps"><div class="pn sn"><div class="pc">/test-impl</div><div class="pa">Sonnet</div><div class="pg8">TC naming strict</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/integration-test</div><div class="pa">Opus→Sonnet</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/system-test</div><div class="pa">Opus→Sonnet</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn hn"><div class="pc">/uat</div><div class="pa">PO</div><div class="pg8">⚑ APPROVED</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn sn"><div class="pc">/devops</div><div class="pa">Sonnet</div><div class="pg8">hook-gated</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn yn"><div class="pc">/final-audit</div><div class="pa">Critic</div><div class="pg8">⚑ SHIP+PO</div></div><div class="parr">→</div></div>
+      <div class="ps"><div class="pn on"><div class="pc">/release</div><div class="pa">Planner</div><div class="pg8">writes global ctx</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Folder Structure -->
+<div id="structure" class="sh"><div class="sl">Folder Structure</div><div class="sline"></div><div class="sid">V3 — CLEAN SEPARATION</div></div>
+<div class="folder-grid" style="margin-bottom:44px;">
+  <div class="folder-card">
+    <div class="folder-title">System & State</div>
+    <div class="folder-desc">ASES internals — hook reads, not project outputs. Never committed as deliverables.</div>
+    <div class="folder-tree">
+<span class="dir">/.ases/</span>
+  context.json + context.md       <span class="comment">← L3: lean</span>
+  sprint_context.json + .md       <span class="comment">← L2: sprint</span>
+  global_context.json + .md       <span class="comment">← L1: PO-only</span>
+  decisions.json + .md            <span class="comment">← ADR, PO-only</span>
+  .audit.log                      <span class="comment">← system audit</span>
+
+<span class="dir">/.claude/</span>
+  settings.json                   <span class="comment">← hooks + model</span>
+  ases-hook.py                    <span class="comment">← CARL-inspired</span>
+  skills/ases-*/SKILL.md          <span class="comment">← 23 skills</span>
+  agents/{planner,architect,      <span class="comment">← agent defs</span>
+          critic,developer}.md
+  commands/ases-*.md              <span class="comment">← utilities</span>
+  system.yaml                     <span class="comment">← config</span>
+
+<span class="dir">/format/</span>
+  json/*.schema.json              <span class="comment">← excluded from scan</span>
+  markdown/*.template.md          <span class="comment">← excluded from scan</span>
+
+.claudeignore                     <span class="comment">← access control</span>
+CLAUDE.md                         <span class="comment">← always-loaded</span>
+    </div>
+  </div>
+  <div class="folder-card">
+    <div class="folder-title">Project & Sprint Outputs</div>
+    <div class="folder-desc">Dual-format documents — JSON for agents, MD for humans. Sprint phase-separated.</div>
+    <div class="folder-tree">
+<span class="dir">/docs/</span>            <span class="comment">← PO-facing, .claudeignore</span>
+  brief.md · prd.md · hld.md
+  roadmap.md · scaffold.md
+
+<span class="dir">/contracts/</span>       <span class="comment">← agent JSON, .claudeignore</span>
+  brief.json · prd.json · hld.json
+  roadmap.json · scaffold.json
+  scaffold_spec.json              <span class="comment">← Opus→Sonnet gate</span>
+
+<span class="dir">/sprints/S1/</span>
+  <span class="dir">design/</span>           <span class="comment">← Phase 1 outputs</span>
+    lld.json+md · schema.json+md
+    test_cases.json+md
+    sprint_gate.json+md
+    scaffold_spec.json            <span class="comment">← sprint Opus→Sonnet</span>
+  <span class="dir">execution/</span>        <span class="comment">← Phase 2 outputs</span>
+    analysis.json+md · tasks.json+md
+    ui_spec.json+md · ui_scaffold_manifest.json
+    <span class="dir">tasks/</span> T-NNN-plan.json+md · critique_T-NNN.json
+    <span class="dir">snapshots/</span> T-NNN-pre.json · T-NNN-fix-N.json
+  <span class="dir">ship/</span>             <span class="comment">← Phase 3 outputs</span>
+    test_suite.json+md · integration_scenarios.json
+    system_test_report.json+md · uat_report.json+md
+    devops_log.json+md · final_audit.json+md
+    sprint_summary.json+md · release.json+md
+
+<span class="dir">/src/</span> /ui/ /tests/{unit,integration,system}/
+CHANGELOG.md
+    </div>
+  </div>
+</div>
+
+<!-- CARL-Inspired Hook -->
+<div id="hook" class="sh"><div class="sl">ases-hook.py — CARL-Inspired</div><div class="sline"></div><div class="sid">4 JOBS · PreToolUse</div></div>
+<div class="hook-card">
+  <div class="hk">
+    <div class="hk-title">Job 1 — Context Injection</div>
+    <div class="hk-desc">Builds &lt;ases-state&gt; block from context.json (always) + sprint_context.json (active sprint). Resolves relevant_decisions[] IDs to full ADR text. Writes injection to .ases/.current_injection.md.</div>
+    <div class="hk-trigger">Trigger: any ases-* command</div>
+  </div>
+  <div class="hk">
+    <div class="hk-title">Job 2 — PO-Only Guard</div>
+    <div class="hk-desc">Blocks Read calls to .ases/decisions.json, global_context.json, docs/prd.md, docs/roadmap.md, docs/hld.md unless the active command is PO-facing. Agents get file-level access control.</div>
+    <div class="hk-trigger">Trigger: Read tool on protected files</div>
+  </div>
+  <div class="hk">
+    <div class="hk-title">Job 3 — Commit Guard</div>
+    <div class="hk-desc">Blocks git commit if uat_report.verdict ≠ APPROVED | CONDITIONAL, or if current_phase ≠ SPRINT_SHIP. Enforces the "commit only after UAT" rule at system level. Replaces guard_commit.py.</div>
+    <div class="hk-trigger">Trigger: Bash git commit</div>
+  </div>
+  <div class="hk">
+    <div class="hk-title">Job 4 — UI Scaffold Guard</div>
+    <div class="hk-desc">Blocks Write to /ui/ paths not declared in ui_scaffold_manifest integration_points[]. Gemini's scaffold is locked. Replaces guard_ui_scaffold.py. Combined with Jobs 1-3 in single hook.</div>
+    <div class="hk-trigger">Trigger: Write to ui/**</div>
+  </div>
+</div>
+
+<!-- Context Brackets -->
+<div class="sh" style="margin-bottom:12px;"><div class="sl">Context Bracket Injection</div><div class="sline"></div><div class="sid">ADAPTIVE VERBOSITY</div></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:44px;">
+  <div style="background:var(--s1);border:1px solid var(--b1);border-top:2px solid var(--sonnet);padding:14px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--sonnet);margin-bottom:4px;">FRESH &gt;70%</div>
+    <div style="font-size:9.5px;color:var(--dim);line-height:1.6;">Full injection. Level 3 + Level 2. Sprint goal, task status, open issues. Resolved ADR text from relevant_decisions[].</div>
+  </div>
+  <div style="background:var(--s1);border:1px solid var(--b1);border-top:2px solid var(--opus);padding:14px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--opus);margin-bottom:4px;">MODERATE 40–70%</div>
+    <div style="font-size:9.5px;color:var(--dim);line-height:1.6;">Abbreviated injection. Level 3 + sprint goal + task counts + ADR IDs only (not full text). Saves ~40% of injection tokens.</div>
+  </div>
+  <div style="background:var(--s1);border:1px solid var(--b1);border-top:2px solid var(--warn);padding:14px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--warn);margin-bottom:4px;">DEPLETED 15–40%</div>
+    <div style="font-size:9.5px;color:var(--dim);line-height:1.6;">Minimal injection. Level 3 only. Sprint ID + task complete/total. No ADRs. Skills read what they need explicitly.</div>
+  </div>
+  <div style="background:var(--s1);border:1px solid var(--b1);border-top:2px solid #ef4444;padding:14px 16px;">
+    <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#ef4444;margin-bottom:4px;">CRITICAL &lt;15%</div>
+    <div style="font-size:9.5px;color:var(--dim);line-height:1.6;">Warning only. Injects single line: ⚠ CONTEXT CRITICAL — run /compact before continuing. No state injection.</div>
+  </div>
+</div>
+
+<!-- Sprint Loop -->
+<div class="sh"><div class="sl">Sprint Execution Loop</div><div class="sline"></div><div class="sid">PER-TASK CYCLE</div></div>
+<div class="loop-wrap">
+  <div class="loop-title">Per-task execution — repeats for every task in execution_order[]</div>
+  <div class="loop-flow">
+    <div class="ln"><div class="lb lb-o">/validate</div><div class="ll">scope check</div></div>
+    <div class="larr">→</div>
+    <div class="ln"><div class="lb lb-s">/dev</div><div class="ll">output_files[] only</div></div>
+    <div class="larr">→</div>
+    <div class="ln"><div class="lb lb-sys">snapshot</div><div class="ll">auto T-NNN-pre</div></div>
+    <div class="larr">→</div>
+    <div class="ln"><div class="lb lb-o">/critique</div><div class="ll">4 lenses + ADR</div></div>
+    <div class="larr">→</div>
+    <div class="ln"><div class="lb lb-s">/fix</div><div class="ll">plan→scope→fix</div></div>
+    <div class="lback">⟳ ×3</div>
+    <div class="ln"><div class="lb lb-y">ESCALATE</div><div class="ll">iter 3 → PO</div></div>
+    <div class="larr" style="padding:0 16px;">·</div>
+    <div class="ln"><div class="lb lb-o">CLEAN ✓</div><div class="ll">context updated</div></div>
+    <div class="larr">→</div>
+    <div class="ln"><div class="lb lb-sys">next task</div><div class="ll">from DAG order</div></div>
+  </div>
+</div>
+
+<!-- Gates -->
+<div id="gates" class="sh"><div class="sl">Human Approval Gates</div><div class="sline"></div><div class="sid">6 PER SPRINT</div></div>
+<div class="gates-grid">
+  <div class="gc"><div class="gc-phase">Project Start</div><div class="gc-trigger">After /ases-roadmap</div><div class="gc-desc">PO approves sprint allocation — governs entire project. /ases-init blocked until approved.</div></div>
+  <div class="gc"><div class="gc-phase">Sprint Design</div><div class="gc-trigger">After /ases-sprint-gate PASS</div><div class="gc-desc">PO approves design docs. sprint_context.json written. Phase 2 locked until confirmed.</div></div>
+  <div class="gc"><div class="gc-phase">Sprint Execution</div><div class="gc-trigger">Critique ESCALATE</div><div class="gc-desc">Iteration cap reached or spec ambiguity. PO resolves before dev resumes.</div></div>
+  <div class="gc"><div class="gc-phase">Sprint Ship</div><div class="gc-trigger">/ases-uat — PO reviews system</div><div class="gc-desc">PO reviews running system against every AC item. Rejected items → surgical re-entry. Blocks /ases-devops.</div></div>
+  <div class="gc"><div class="gc-phase">Sprint Ship</div><div class="gc-trigger">After /ases-final-audit SHIP</div><div class="gc-desc">PO approves audit report. /ases-release blocked until confirmed. Writes global_context entries.</div></div>
+  <div class="gc"><div class="gc-phase">Any Phase</div><div class="gc-trigger">BLOCK verdict</div><div class="gc-desc">Any BLOCK from sprint-gate or final-audit routes to PO with exact surgical re-entry path.</div></div>
+</div>
+
+<!-- Rules -->
+<div id="rules" class="sh"><div class="sl">Hard Rules</div><div class="sline"></div><div class="sid">NON-NEGOTIABLE</div></div>
+<div class="rules-grid">
+  <div class="rc"><div class="rc-n">01</div><div class="rc-t">JSON-only outputs between all pipeline stages — no prose handoffs</div></div>
+  <div class="rc"><div class="rc-n">02</div><div class="rc-t">Dual format every document — JSON for agents, Markdown for humans</div></div>
+  <div class="rc"><div class="rc-n">03</div><div class="rc-t">Sonnet writes only output_files[] from task plan — scope is explicit, not inferred</div></div>
+  <div class="rc"><div class="rc-n">04</div><div class="rc-t">Critique loop mandatory — max 3 iterations then escalate to PO</div></div>
+  <div class="rc"><div class="rc-n">05</div><div class="rc-t">scaffold_spec.json gates Sonnet — Opus writes spec first, Sonnet confirms before acting</div></div>
+  <div class="rc"><div class="rc-n">06</div><div class="rc-t">Sonnet never touches Gemini UI scaffold — only declared integration_points</div></div>
+  <div class="rc"><div class="rc-n">07</div><div class="rc-t">Git commit only after UAT approval — ases-hook.py enforces at system level</div></div>
+  <div class="rc"><div class="rc-n">08</div><div class="rc-t">Every tradeoff → typed DS-NNN ADR entry with module_refs[] and recall_keywords[]</div></div>
+  <div class="rc"><div class="rc-n">09</div><div class="rc-t">Test cases from AC only — naming: test_{tc_id_lowercase}_{description}</div></div>
+  <div class="rc"><div class="rc-n">10</div><div class="rc-t">Global context PO-only — hook blocks agent reads unless PO-facing command</div></div>
+</div>
+
+<div class="footer">
+  <div class="footer-truth">This is not prompting — this is an <span>AI software factory.</span></div>
+  <div class="footer-meta">
+    ASES v3.0 · 23 Commands · 3 Context Levels · 6 ID Types · 10 Rules · 6 Gates<br>
+    Opus 4.6 · Claude Sonnet · Gemini 3.1 Pro · Human PO · CARL-inspired hook
+  </div>
+</div>
+
+</div>
+</body>
+</html>

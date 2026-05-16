@@ -1,33 +1,52 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "deps_manifest",
-  "produced_by": "/lld",
-  "consumed_by": ["/analyze", "/scaffold", "/sprint-scaffold"],
-  "sprint_id": "S1",
-  "packages": [
-    {
-      "name": "",
-      "version": "",
-      "type": "runtime | dev | peer",
-      "required_by": [],
-      "install_cmd": ""
-    }
-  ],
-  "services": [
-    {
-      "name": "",
-      "version": "",
-      "required_by": [],
-      "setup_notes": ""
-    }
-  ],
-  "env_vars": [
-    {
-      "name": "",
-      "required": true,
-      "description": "",
-      "example": ""
-    }
-  ],
-  "migrations": []
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/deps_manifest",
+  "title": "ASES Dependencies Manifest",
+  "description": "Produced by /ases-lld. Consumed by /ases-analyze, /ases-scaffold, /ases-sprint-scaffold.",
+  "type": "object",
+  "required": ["sprint_id"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "type": { "type": "string", "enum": ["runtime", "dev", "peer"] },
+          "required_by": { "type": "array", "items": { "type": "string" } },
+          "install_cmd": { "type": "string" }
+        }
+      }
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "required_by": { "type": "array", "items": { "type": "string" } },
+          "setup_notes": { "type": "string" }
+        }
+      }
+    },
+    "env_vars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "required"],
+        "properties": {
+          "name": { "type": "string" },
+          "required": { "type": "boolean" },
+          "description": { "type": "string" },
+          "example": { "type": "string" }
+        }
+      }
+    },
+    "migrations": { "type": "array", "items": { "type": "string" } }
+  }
 }

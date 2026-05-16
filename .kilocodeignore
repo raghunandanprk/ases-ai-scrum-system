@@ -1,0 +1,46 @@
+# ── ASES .kilocodeignore ──────────────────────────────────────────────
+# Kilo Code equivalent of .claudeignore. Same .gitignore syntax.
+# Two sections: EXCLUDED (token efficiency) and PO-ONLY (access control).
+# PO-ONLY enforcement is backed by ases-guard.ts plugin.
+# Skills access EXCLUDED files via explicit Read calls in their Input section.
+# Skills may NOT access PO-ONLY files — only PO-facing commands can.
+
+# ── EXCLUDED ──────────────────────────────────────────────────────────
+# Not auto-scanned by Kilo Code. Accessible by explicit skill Read call.
+
+# ASES system formats — not project outputs
+/format/
+
+# Global history — too large for casual reads, use /ases-inject [ID]
+/.ases/global_context.json
+/.ases/global_context.md
+
+# Prior sprint phases — not needed during active phase
+/sprints/*/design/
+/sprints/*/ship/
+
+# Machine-readable contracts — agents read via explicit skill calls only
+/contracts/
+
+# Human documents — PO reads these, not agents
+/docs/brief.md
+/docs/scaffold.md
+
+# Audit log — system internal
+/.ases/.audit.log
+/.ases/.current_injection.md
+
+# Graphify output — skills read explicitly when needed
+/graphify-out/
+
+# ── PO-ONLY ───────────────────────────────────────────────────────────
+# Accessible ONLY through PO-facing commands:
+# /ases-uat, /ases-roadmap, /ases-prd-update, /ases-release,
+# /ases-inject, /ases-context, /ases-status, /ases-prd, /ases-hld, /ases-interview
+# ases-guard.ts enforces this at the system level.
+
+/.ases/decisions.json
+/.ases/decisions.md
+/docs/prd.md
+/docs/roadmap.md
+/docs/hld.md

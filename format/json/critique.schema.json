@@ -1,27 +1,36 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "critique",
-  "produced_by": "/critique",
-  "consumed_by": ["/fix", "/sprint-close", "/final-audit"],
-  "task_id": "T-001",
-  "iteration": 1,
-  "issues": [
-    {
-      "id": "I-001",
-      "lens": "spec | contract | test | security",
-      "severity": "critical | major | minor",
-      "file": "",
-      "line_ref": "",
-      "description": "",
-      "fix_instruction": "",
-      "spec_ref": "",
-      "adr_ref": "",
-      "is_adr_tradeoff": false
-    }
-  ],
-  "verdict": "CLEAN | FIX_REQUIRED | ESCALATE",
-  "escalation_reason": "",
-  "critical_count": 0,
-  "major_count": 0,
-  "minor_count": 0
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/critique",
+  "title": "ASES Critique Output",
+  "description": "Produced by /ases-critique. Consumed by /ases-fix, /ases-sprint-close, /ases-final-audit.",
+  "type": "object",
+  "required": ["task_id", "iteration", "issues", "verdict"],
+  "properties": {
+    "task_id": { "type": "string", "pattern": "^T-\\d{3}$" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "lens", "severity", "file", "description", "fix_instruction"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^I-\\d{3}$" },
+          "lens": { "type": "string", "enum": ["spec", "contract", "test", "security"] },
+          "severity": { "type": "string", "enum": ["critical", "major", "minor"] },
+          "file": { "type": "string" },
+          "line_ref": { "type": "string" },
+          "description": { "type": "string" },
+          "fix_instruction": { "type": "string" },
+          "spec_ref": { "type": "string" },
+          "adr_ref": { "type": "string" },
+          "is_adr_tradeoff": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "verdict": { "type": "string", "enum": ["CLEAN", "FIX_REQUIRED", "ESCALATE"] },
+    "escalation_reason": { "type": "string" },
+    "critical_count": { "type": "integer", "minimum": 0 },
+    "major_count": { "type": "integer", "minimum": 0 },
+    "minor_count": { "type": "integer", "minimum": 0 }
+  }
 }

@@ -29,6 +29,9 @@
 /.ases/.audit.log
 /.ases/.current_injection.md
 
+# Graphify output — skills read explicitly when needed
+/graphify-out/
+
 # ── PO-ONLY ───────────────────────────────────────────────────────────
 # Accessible ONLY through PO-facing commands:
 # /ases-uat, /ases-roadmap, /ases-prd-update, /ases-release,

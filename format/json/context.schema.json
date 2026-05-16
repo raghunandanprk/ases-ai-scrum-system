@@ -1,47 +1,122 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "context",
-  "produced_by": "/init",
-  "updated_by": "every_command",
-  "project_id": "",
-  "project_name": "",
-  "created_at": "",
-  "current_sprint": "S1",
-  "current_phase": "PROJECT_START | SPRINT_DESIGN | SPRINT_EXECUTION | SPRINT_SHIP",
-  "current_stage": "",
-  "prd_version": 1,
-  "completed_steps": [],
-  "open_issues": [
-    {
-      "id": "OI-001",
-      "source": "",
-      "description": "",
-      "severity": "critical | major | minor",
-      "status": "open | resolved"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/context",
+  "title": "ASES Project Context",
+  "description": "Full project state. Produced by /ases-init, updated by every command. The first 8 fields (project through prd_version) are the Level 3 lean fields injected by ases-hook.py on every session.",
+  "type": "object",
+  "required": ["project", "sprint", "phase", "stage", "last_completed", "next", "blockers", "prd_version"],
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Project name"
+    },
+    "sprint": {
+      "type": "string",
+      "description": "Current sprint ID",
+      "pattern": "^S\\d+$"
+    },
+    "phase": {
+      "type": "string",
+      "description": "Current pipeline phase",
+      "enum": ["PROJECT_START", "SPRINT_DESIGN", "SPRINT_EXECUTION", "SPRINT_SHIP"]
+    },
+    "stage": {
+      "type": "string",
+      "description": "Current stage within phase (e.g. 'lld', 'dev T-003')"
+    },
+    "last_completed": {
+      "type": "string",
+      "description": "Last completed pipeline step (e.g. '/ases-hld')"
+    },
+    "next": {
+      "type": "string",
+      "description": "Next recommended command (e.g. '/ases-roadmap')"
+    },
+    "blockers": {
+      "type": "array",
+      "description": "Current blockers preventing progress",
+      "items": { "type": "string" }
+    },
+    "prd_version": {
+      "type": "integer",
+      "description": "Current PRD version number",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "description": "ISO-8601 timestamp of project initialization",
+      "format": "date-time"
+    },
+    "completed_steps": {
+      "type": "array",
+      "description": "All completed pipeline steps in order",
+      "items": { "type": "string" }
+    },
+    "open_issues": {
+      "type": "array",
+      "description": "Open issues from gates and critiques",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "description", "severity", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^OI-\\d{3}$" },
+          "source": { "type": "string" },
+          "description": { "type": "string" },
+          "severity": { "type": "string", "enum": ["critical", "major", "minor"] },
+          "status": { "type": "string", "enum": ["open", "resolved"] }
+        }
+      }
+    },
+    "deferred_items": {
+      "type": "array",
+      "description": "Items deferred to future sprints",
+      "items": { "type": "string" }
+    },
+    "tech_debt": {
+      "type": "array",
+      "description": "Known tech debt items",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "severity"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^TD-\\d{3}$" },
+          "description": { "type": "string" },
+          "severity": { "type": "string", "enum": ["major", "minor"] },
+          "source": { "type": "string" },
+          "target_sprint": { "type": "string" }
+        }
+      }
+    },
+    "sprint_history": {
+      "type": "array",
+      "description": "Summary of completed sprints",
+      "items": {
+        "type": "object",
+        "required": ["sprint_id", "status"],
+        "properties": {
+          "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+          "status": { "type": "string", "enum": ["shipped", "partial", "blocked"] },
+          "shipped_at": { "type": "string" },
+          "verdict": { "type": "string", "enum": ["SHIP", "CONDITIONAL_SHIP"] },
+          "features_shipped": { "type": "array", "items": { "type": "string" } },
+          "tasks_deferred": { "type": "array", "items": { "type": "string" } },
+          "tech_debt_introduced": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "decisions_count": {
+      "type": "integer",
+      "description": "Total number of ADR entries in decisions.json",
+      "minimum": 0
+    },
+    "last_updated": {
+      "type": "string",
+      "description": "ISO-8601 timestamp of last update",
+      "format": "date-time"
+    },
+    "last_updated_by": {
+      "type": "string",
+      "description": "Command that last updated this file"
     }
-  ],
-  "deferred_items": [],
-  "tech_debt": [
-    {
-      "id": "TD-001",
-      "description": "",
-      "severity": "major | minor",
-      "source": "",
-      "target_sprint": ""
-    }
-  ],
-  "sprint_history": [
-    {
-      "sprint_id": "S1",
-      "status": "shipped | partial | blocked",
-      "shipped_at": "",
-      "verdict": "SHIP | CONDITIONAL_SHIP",
-      "features_shipped": [],
-      "tasks_deferred": [],
-      "tech_debt_introduced": []
-    }
-  ],
-  "decisions_count": 0,
-  "last_updated": "",
-  "last_updated_by": ""
+  }
 }

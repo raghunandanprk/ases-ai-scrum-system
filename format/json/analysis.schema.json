@@ -1,33 +1,51 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "analysis",
-  "produced_by": "/analyze",
-  "consumed_by": ["/sprint-scaffold", "/tasks"],
-  "sprint_id": "S1",
-  "blocking_gaps": [
-    {
-      "id": "BG-001",
-      "type": "missing_package | missing_file | missing_service | missing_env | missing_migration",
-      "description": "",
-      "required_by": [],
-      "resolution": ""
-    }
-  ],
-  "non_blocking_gaps": [
-    {
-      "id": "NBG-001",
-      "description": "",
-      "impact": "low | negligible",
-      "resolution": ""
-    }
-  ],
-  "codebase_drift": [
-    {
-      "lld_expects": "",
-      "actual_state": "missing | modified | mismatched",
-      "impact": "",
-      "sprint_ref": ""
-    }
-  ],
-  "verdict": "READY | BLOCKED"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/analysis",
+  "title": "ASES Sprint Analysis",
+  "description": "Produced by /ases-analyze. Consumed by /ases-sprint-scaffold, /ases-tasks.",
+  "type": "object",
+  "required": ["sprint_id", "verdict"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "blocking_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "description", "resolution"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["missing_package", "missing_file", "missing_service", "missing_env", "missing_migration"] },
+          "description": { "type": "string" },
+          "required_by": { "type": "array", "items": { "type": "string" } },
+          "resolution": { "type": "string" }
+        }
+      }
+    },
+    "non_blocking_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "impact": { "type": "string", "enum": ["low", "negligible"] },
+          "resolution": { "type": "string" }
+        }
+      }
+    },
+    "codebase_drift": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lld_expects": { "type": "string" },
+          "actual_state": { "type": "string", "enum": ["missing", "modified", "mismatched"] },
+          "impact": { "type": "string" },
+          "sprint_ref": { "type": "string" }
+        }
+      }
+    },
+    "verdict": { "type": "string", "enum": ["READY", "BLOCKED"] }
+  }
 }

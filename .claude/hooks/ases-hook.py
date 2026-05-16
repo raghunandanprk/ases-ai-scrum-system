@@ -214,12 +214,12 @@ def check_commit_guard(tool_input: dict, root: Path) -> tuple[bool, str]:
 # ── JOB 4: UI SCAFFOLD GUARD (replaces guard_ui_scaffold.py) ──────────
 
 def check_ui_guard(tool_name: str, tool_input: dict, root: Path) -> tuple[bool, str]:
-    """Block writes to /ui/ outside declared integration_points."""
+    """Block writes to frontend/ outside declared integration_points."""
     if tool_name != "Write":
         return False, ""
 
     file_path = str(tool_input.get("file_path", "") or tool_input.get("path", ""))
-    if "/ui/" not in file_path and not file_path.startswith("ui/"):
+    if "/frontend/" not in file_path and not file_path.startswith("frontend/"):
         return False, ""
 
     ctx = load_json(root / ".ases" / "context.json")
@@ -239,14 +239,14 @@ def check_ui_guard(tool_name: str, tool_input: dict, root: Path) -> tuple[bool, 
             if loc:
                 allowed.add(loc)
 
-    rel = file_path.replace("./ui/", "").replace("ui/", "")
+    rel = file_path.replace("./frontend/", "").replace("frontend/", "")
     is_allowed = any(rel in loc or loc in rel for loc in allowed)
 
     if not is_allowed:
         return True, (
             f"[ASES GUARD] UI scaffold is locked. '{file_path}' is not a declared integration_point.\n"
             f"Allowed: {sorted(allowed)}\n"
-            "Only Gemini may modify UI scaffold structure. GLM/Sonnet may only touch integration_points."
+            "Only Gemini may modify UI scaffold structure. Execution agent may only touch integration_points."
         )
     return False, ""
 

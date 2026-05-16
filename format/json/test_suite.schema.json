@@ -1,23 +1,32 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "test_suite",
-  "produced_by": "/test-impl",
-  "consumed_by": ["/final-audit"],
-  "sprint_id": "S1",
-  "test_files": [
-    {
-      "path": "tests/unit/test_signal.py",
-      "task_ref": "T-001",
-      "test_case_refs": ["TC-001"],
-      "type": "unit | integration | edge",
-      "framework": "pytest | jest | playwright",
-      "status": "written | skipped",
-      "skip_reason": "",
-      "run_cmd": ""
-    }
-  ],
-  "coverage_map": {},
-  "run_all_cmd": "",
-  "total_cases": 0,
-  "skipped_cases": 0
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/test_suite",
+  "title": "ASES Test Suite Manifest",
+  "description": "Produced by /ases-test-impl. Consumed by /ases-final-audit.",
+  "type": "object",
+  "required": ["sprint_id", "test_files", "run_all_cmd", "total_cases"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "test_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "task_ref", "test_case_refs", "type", "framework", "status"],
+        "properties": {
+          "path": { "type": "string" },
+          "task_ref": { "type": "string" },
+          "test_case_refs": { "type": "array", "items": { "type": "string" } },
+          "type": { "type": "string", "enum": ["unit", "integration", "edge"] },
+          "framework": { "type": "string", "enum": ["pytest", "jest", "playwright"] },
+          "status": { "type": "string", "enum": ["written", "skipped"] },
+          "skip_reason": { "type": "string" },
+          "run_cmd": { "type": "string" }
+        }
+      }
+    },
+    "coverage_map": { "type": "object", "additionalProperties": { "type": "string" } },
+    "run_all_cmd": { "type": "string" },
+    "total_cases": { "type": "integer", "minimum": 0 },
+    "skipped_cases": { "type": "integer", "minimum": 0 }
+  }
 }

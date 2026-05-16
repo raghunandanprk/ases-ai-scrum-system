@@ -1,24 +1,33 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "test_cases",
-  "produced_by": "/test-spec",
-  "consumed_by": ["/tasks", "/test-impl", "/critique", "/final-audit"],
-  "sprint_id": "S1",
-  "test_cases": [
-    {
-      "id": "TC-001",
-      "feature_id": "F-001",
-      "ac_ref": "AC-001",
-      "description": "",
-      "type": "unit | integration | edge | performance | security",
-      "priority": "critical | high | low",
-      "file_ref": "src/engine/signal.py",
-      "function_ref": "",
-      "inputs": {},
-      "expected_output": {},
-      "expected_side_effects": [],
-      "should_raise": null,
-      "framework": "pytest | jest | playwright"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/test_cases",
+  "title": "ASES Test Case Specifications",
+  "description": "Produced by /ases-test-spec. Consumed by /ases-tasks, /ases-test-impl, /ases-critique, /ases-final-audit.",
+  "type": "object",
+  "required": ["sprint_id", "test_cases"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "feature_id", "ac_ref", "description", "type", "priority", "file_ref", "inputs", "expected_output", "framework"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^TC-\\d{3}$" },
+          "feature_id": { "type": "string", "pattern": "^F-\\d{3}$" },
+          "ac_ref": { "type": "string", "pattern": "^AC-\\d{3}$" },
+          "description": { "type": "string" },
+          "type": { "type": "string", "enum": ["unit", "integration", "edge", "performance", "security"] },
+          "priority": { "type": "string", "enum": ["critical", "high", "low"] },
+          "file_ref": { "type": "string" },
+          "function_ref": { "type": "string" },
+          "inputs": { "type": "object" },
+          "expected_output": { "type": "object" },
+          "expected_side_effects": { "type": "array", "items": { "type": "string" } },
+          "should_raise": { "type": ["string", "null"] },
+          "framework": { "type": "string", "enum": ["pytest", "jest", "playwright"] }
+        }
+      }
     }
-  ]
+  }
 }

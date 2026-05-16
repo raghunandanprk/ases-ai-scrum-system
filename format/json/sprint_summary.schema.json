@@ -1,28 +1,40 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "sprint_summary",
-  "produced_by": "/sprint-close",
-  "consumed_by": ["/test-impl", "/devops", "/release"],
-  "sprint_id": "S1",
-  "completed_tasks": [],
-  "deferred_tasks": [],
-  "escalated_tasks": [],
-  "new_decisions": [],
-  "tech_debt": [
-    {
-      "id": "TD-001",
-      "source": "critique_loop | escalation",
-      "description": "",
-      "severity": "major | minor",
-      "target_sprint": "S2 | TBD"
-    }
-  ],
-  "next_sprint_inputs": {
-    "carry_forward_tasks": [],
-    "known_constraints": [],
-    "suggested_prd_updates": [],
-    "new_risks": []
-  },
-  "test_case_refs_to_verify": [],
-  "ui_scaffold_manifest_ref": ""
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/sprint_summary",
+  "title": "ASES Sprint Summary",
+  "description": "Produced by /ases-sprint-close. Consumed by /ases-test-impl, /ases-devops, /ases-release.",
+  "type": "object",
+  "required": ["sprint_id", "completed_tasks", "next_sprint_inputs"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "completed_tasks": { "type": "array", "items": { "type": "string" } },
+    "deferred_tasks": { "type": "array", "items": { "type": "string" } },
+    "escalated_tasks": { "type": "array", "items": { "type": "string" } },
+    "new_decisions": { "type": "array", "items": { "type": "string" } },
+    "tech_debt": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "description", "severity"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^TD-\\d{3}$" },
+          "source": { "type": "string", "enum": ["critique_loop", "escalation"] },
+          "description": { "type": "string" },
+          "severity": { "type": "string", "enum": ["major", "minor"] },
+          "target_sprint": { "type": "string" }
+        }
+      }
+    },
+    "next_sprint_inputs": {
+      "type": "object",
+      "properties": {
+        "carry_forward_tasks": { "type": "array", "items": { "type": "string" } },
+        "known_constraints": { "type": "array", "items": { "type": "string" } },
+        "suggested_prd_updates": { "type": "array", "items": { "type": "string" } },
+        "new_risks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "test_case_refs_to_verify": { "type": "array", "items": { "type": "string" } },
+    "ui_scaffold_manifest_ref": { "type": "string" }
+  }
 }

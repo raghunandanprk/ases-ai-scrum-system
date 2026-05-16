@@ -1,38 +1,38 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "sprint_gate",
-  "produced_by": "/sprint-gate",
-  "consumed_by": ["/analyze"],
-  "sprint_id": "S1",
-  "timestamp": "",
-  "checks": [
-    {
-      "check": "lld_files_cover_roadmap_scope",
-      "status": "pass | fail",
-      "details": ""
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/sprint_gate",
+  "title": "ASES Sprint Gate",
+  "description": "Produced by /ases-sprint-gate. Consumed by /ases-analyze.",
+  "type": "object",
+  "required": ["sprint_id", "timestamp", "checks", "verdict"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "status"],
+        "properties": {
+          "check": {
+            "type": "string",
+            "enum": [
+              "lld_files_cover_roadmap_scope",
+              "schema_entities_match_lld_models",
+              "test_cases_cover_all_ac",
+              "deps_manifest_complete",
+              "no_lld_conflicts_with_previous_sprint"
+            ]
+          },
+          "status": { "type": "string", "enum": ["pass", "fail", "n/a"] },
+          "details": { "type": "string" }
+        }
+      },
+      "minItems": 5,
+      "maxItems": 5
     },
-    {
-      "check": "schema_entities_match_lld_models",
-      "status": "pass | fail",
-      "details": ""
-    },
-    {
-      "check": "test_cases_cover_all_ac",
-      "status": "pass | fail",
-      "details": ""
-    },
-    {
-      "check": "deps_manifest_complete",
-      "status": "pass | fail",
-      "details": ""
-    },
-    {
-      "check": "no_lld_conflicts_with_previous_sprint",
-      "status": "pass | fail | n/a",
-      "details": ""
-    }
-  ],
-  "verdict": "PASS | FAIL",
-  "blocking_issues": [],
-  "warnings": []
+    "verdict": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "blocking_issues": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
 }

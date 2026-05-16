@@ -1,20 +1,29 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "devops_log",
-  "produced_by": "/devops",
-  "consumed_by": ["/final-audit", "/release"],
-  "sprint_id": "S1",
-  "operations": [
-    {
-      "type": "git_commit",
-      "scope": "sprint_complete",
-      "message": "",
-      "branch": "",
-      "files_included": [],
-      "commit_hash": "",
-      "status": "success | failed",
-      "error": ""
-    }
-  ],
-  "future_hooks": ["branch_strategy", "pr_creation", "ci_trigger", "deploy_pipeline"]
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/devops_log",
+  "title": "ASES DevOps Log",
+  "description": "Produced by /ases-devops. Consumed by /ases-final-audit, /ases-release.",
+  "type": "object",
+  "required": ["sprint_id", "operations"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "scope", "status"],
+        "properties": {
+          "type": { "type": "string" },
+          "scope": { "type": "string" },
+          "message": { "type": "string" },
+          "branch": { "type": "string" },
+          "files_included": { "type": "array", "items": { "type": "string" } },
+          "commit_hash": { "type": "string" },
+          "status": { "type": "string", "enum": ["success", "failed"] },
+          "error": { "type": "string" }
+        }
+      }
+    },
+    "future_hooks": { "type": "array", "items": { "type": "string" } }
+  }
 }

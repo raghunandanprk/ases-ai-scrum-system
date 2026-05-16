@@ -12,6 +12,9 @@
 # ASES snapshots (large, rollback only)
 sprints/*/execution/snapshots/
 
+# Graphify knowledge graph (rebuild with /ases-graphify)
+graphify-out/
+
 # Node
 node_modules/
 .next/

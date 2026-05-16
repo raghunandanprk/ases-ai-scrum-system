@@ -1,25 +1,31 @@
 {
-  "$schema": "ases/v3.0",
-  "document": "sprint_context",
-  "level": 2,
-  "description": "Sprint-scoped context — written by /ases-sprint-gate on PASS, auto-loaded by hook during active sprint",
-  "produced_by": "/ases-sprint-gate",
-  "consumed_by": ["ases-hook.py — injected during active sprint"],
-  "sprint_id": "S1",
-  "sprint_goal": "",
-  "features_in_scope": [],
-  "modules_in_scope": [],
-  "tasks_status": {
-    "total": 0,
-    "complete": 0,
-    "in_progress": 0,
-    "pending": 0,
-    "deferred": 0
-  },
-  "open_issues": [],
-  "carry_forward_from_previous": [],
-  "relevant_decisions": [],
-  "known_constraints": [],
-  "written_at": "",
-  "written_by": "ases-sprint-gate"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/sprint_context",
+  "title": "ASES Sprint Context (Level 2)",
+  "description": "Produced by /ases-sprint-gate on PASS. Consumed by ases-hook.py during active sprint.",
+  "type": "object",
+  "required": ["sprint_id", "sprint_goal", "tasks_status", "written_by"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "sprint_goal": { "type": "string" },
+    "features_in_scope": { "type": "array", "items": { "type": "string" } },
+    "modules_in_scope": { "type": "array", "items": { "type": "string" } },
+    "tasks_status": {
+      "type": "object",
+      "required": ["total", "complete", "in_progress", "pending", "deferred"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "complete": { "type": "integer", "minimum": 0 },
+        "in_progress": { "type": "integer", "minimum": 0 },
+        "pending": { "type": "integer", "minimum": 0 },
+        "deferred": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "open_issues": { "type": "array", "items": { "type": "string" } },
+    "carry_forward_from_previous": { "type": "array", "items": { "type": "string" } },
+    "relevant_decisions": { "type": "array", "items": { "type": "string" } },
+    "known_constraints": { "type": "array", "items": { "type": "string" } },
+    "written_at": { "type": "string", "format": "date-time" },
+    "written_by": { "type": "string" }
+  }
 }

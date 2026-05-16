@@ -1,30 +1,68 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "lld",
-  "produced_by": "/lld",
-  "consumed_by": ["/schema", "/test-spec", "/tasks", "/validate", "/dev"],
-  "sprint_id": "S1",
-  "files": [
-    {
-      "path": "src/engine/signal.py",
-      "purpose": "",
-      "layer": "presentation | application | domain | infrastructure",
-      "module_ref": "M-001",
-      "functions": [
-        {
-          "name": "",
-          "inputs": [{ "name": "", "type": "", "required": true }],
-          "outputs": [{ "name": "", "type": "" }],
-          "description": "",
-          "raises": []
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/lld",
+  "title": "ASES Low-Level Design",
+  "description": "Produced by /ases-lld. Consumed by /ases-schema, /ases-test-spec, /ases-tasks, /ases-validate, /ases-dev.",
+  "type": "object",
+  "required": ["sprint_id", "files"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "purpose", "layer", "module_ref", "functions", "interfaces", "depends_on"],
+        "properties": {
+          "path": { "type": "string" },
+          "purpose": { "type": "string" },
+          "layer": { "type": "string", "enum": ["presentation", "application", "domain", "infrastructure"] },
+          "module_ref": { "type": "string", "pattern": "^M-\\d{3}$" },
+          "functions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "inputs", "outputs", "description"],
+              "properties": {
+                "name": { "type": "string" },
+                "inputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name", "type"],
+                    "properties": {
+                      "name": { "type": "string" },
+                      "type": { "type": "string" },
+                      "required": { "type": "boolean", "default": true }
+                    }
+                  }
+                },
+                "outputs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name", "type"],
+                    "properties": {
+                      "name": { "type": "string" },
+                      "type": { "type": "string" }
+                    }
+                  }
+                },
+                "description": { "type": "string" },
+                "raises": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "interfaces": {
+            "type": "object",
+            "properties": {
+              "exports": { "type": "array", "items": { "type": "string" } },
+              "expects": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "test_required": { "type": "boolean", "default": true }
         }
-      ],
-      "interfaces": {
-        "exports": [],
-        "expects": []
-      },
-      "depends_on": [],
-      "test_required": true
+      }
     }
-  ]
+  }
 }

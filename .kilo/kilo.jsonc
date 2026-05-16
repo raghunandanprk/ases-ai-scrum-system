@@ -1,0 +1,43 @@
+{
+  // ASES v3.1 — Kilo Code Project Configuration
+  // This file configures Kilo Code for the ASES AI Scrum Engineering System.
+
+  // Model configuration — matches system.yaml roles
+  "model": {
+    "default": "anthropic/claude-sonnet-4-6"
+  },
+
+  // Tool permissions
+  "permission": {
+    "read": "allow",
+    "edit": "ask",
+    "bash": "ask",
+    "browser": "deny",
+    "task": "allow"
+  },
+
+  // File-level protections (supplements ases-guard.ts plugin)
+  "fileRestrictions": {
+    "deny": [
+      ".ases/decisions.json",
+      ".ases/decisions.md",
+      ".ases/global_context.json",
+      ".ases/global_context.md",
+      "docs/prd.md",
+      "docs/roadmap.md",
+      "docs/hld.md",
+      ".env",
+      "*.key",
+      "*.pem"
+    ]
+  },
+
+  // Context management
+  "context": {
+    "allowVeryLargeFileReads": false,
+    "maxFileSize": 100000
+  },
+
+  // MCP servers (add project-specific servers here)
+  "mcpServers": {}
+}

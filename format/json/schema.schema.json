@@ -1,32 +1,51 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "schema",
-  "produced_by": "/schema",
-  "consumed_by": ["/dev", "/sprint-gate", "/test-spec"],
-  "sprint_id": "S1",
-  "entities": [
-    {
-      "name": "",
-      "hld_module": "M-001",
-      "type": "table | model | enum | type",
-      "fields": [
-        {
-          "name": "",
-          "type": "",
-          "nullable": false,
-          "default": null,
-          "description": ""
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/schema",
+  "title": "ASES Data Schema",
+  "description": "Produced by /ases-schema. Consumed by /ases-dev, /ases-sprint-gate, /ases-test-spec.",
+  "type": "object",
+  "required": ["sprint_id", "entities"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "hld_module", "type", "fields"],
+        "properties": {
+          "name": { "type": "string" },
+          "hld_module": { "type": "string", "pattern": "^M-\\d{3}$" },
+          "type": { "type": "string", "enum": ["table", "model", "enum", "type"] },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "nullable": { "type": "boolean", "default": false },
+                "default": {},
+                "description": { "type": "string" }
+              }
+            }
+          },
+          "indexes": { "type": "array", "items": { "type": "string" } },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "target"],
+              "properties": {
+                "type": { "type": "string", "enum": ["one_to_many", "many_to_many", "one_to_one"] },
+                "target": { "type": "string" },
+                "foreign_key": { "type": "string" }
+              }
+            }
+          },
+          "constraints": { "type": "array", "items": { "type": "string" } }
         }
-      ],
-      "indexes": [],
-      "relationships": [
-        {
-          "type": "one_to_many | many_to_many | one_to_one",
-          "target": "",
-          "foreign_key": ""
-        }
-      ],
-      "constraints": []
+      }
     }
-  ]
+  }
 }

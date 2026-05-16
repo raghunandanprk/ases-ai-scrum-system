@@ -1,24 +1,38 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "roadmap",
-  "produced_by": "/roadmap",
-  "consumed_by": ["/lld", "/sprint-gate", "/release"],
-  "sprints": [
-    {
-      "id": "S1",
-      "goal": "",
-      "features": ["F-001"],
-      "modules": ["M-001"],
-      "scope_notes": "",
-      "dependencies_on": [],
-      "status": "planned | active | complete | deferred"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/roadmap",
+  "title": "ASES Sprint Roadmap",
+  "description": "Produced by /ases-roadmap. Consumed by /ases-lld, /ases-sprint-gate, /ases-release.",
+  "type": "object",
+  "required": ["sprints"],
+  "properties": {
+    "sprints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "goal", "features", "modules"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^S\\d+$" },
+          "goal": { "type": "string" },
+          "features": { "type": "array", "items": { "type": "string", "pattern": "^F-\\d{3}$" } },
+          "modules": { "type": "array", "items": { "type": "string", "pattern": "^M-\\d{3}$" } },
+          "scope_notes": { "type": "string" },
+          "dependencies_on": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string", "enum": ["planned", "active", "complete", "deferred"] }
+        }
+      }
+    },
+    "deferred": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "reason"],
+        "properties": {
+          "item": { "type": "string" },
+          "reason": { "type": "string" },
+          "target_sprint": { "type": "string" }
+        }
+      }
     }
-  ],
-  "deferred": [
-    {
-      "item": "",
-      "reason": "",
-      "target_sprint": "S2 | TBD"
-    }
-  ]
+  }
 }

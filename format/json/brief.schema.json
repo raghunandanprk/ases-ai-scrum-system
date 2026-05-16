@@ -1,30 +1,45 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "brief",
-  "produced_by": "/interview",
-  "consumed_by": ["/prd", "/hld", "/init"],
-  "version": 1,
-  "product": {
-    "name": "",
-    "objective": "",
-    "users": [],
-    "core_features": [],
-    "non_goals": [],
-    "success_criteria": []
-  },
-  "engineering": {
-    "tech_stack": {
-      "backend": "",
-      "frontend": "",
-      "database": "",
-      "infra": ""
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/brief",
+  "title": "ASES Project Brief",
+  "description": "Produced by /ases-interview. Consumed by /ases-prd, /ases-hld, /ases-init.",
+  "type": "object",
+  "required": ["version", "product", "engineering"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "product": {
+      "type": "object",
+      "required": ["name", "objective", "core_features"],
+      "properties": {
+        "name": { "type": "string" },
+        "objective": { "type": "string" },
+        "users": { "type": "array", "items": { "type": "string" } },
+        "core_features": { "type": "array", "items": { "type": "string" } },
+        "non_goals": { "type": "array", "items": { "type": "string" } },
+        "success_criteria": { "type": "array", "items": { "type": "string" } }
+      }
     },
-    "known_integrations": [],
-    "performance_constraints": [],
-    "deployment_context": "",
-    "data_shape": ""
-  },
-  "constraints": [],
-  "risks": [],
-  "sprint_1_hypothesis": ""
+    "engineering": {
+      "type": "object",
+      "required": ["tech_stack"],
+      "properties": {
+        "tech_stack": {
+          "type": "object",
+          "properties": {
+            "backend": { "type": "string" },
+            "frontend": { "type": "string" },
+            "database": { "type": "string" },
+            "infra": { "type": "string" }
+          }
+        },
+        "known_integrations": { "type": "array", "items": { "type": "string" } },
+        "performance_constraints": { "type": "array", "items": { "type": "string" } },
+        "deployment_context": { "type": "string" },
+        "data_shape": { "type": "string" }
+      }
+    },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "sprint_1_hypothesis": { "type": "string" }
+  }
 }

@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import quantflo; import quantflo.core; import quantflo.data; import quantflo.indicators; import quantflo.indicators.builtin; import quantflo.signals; import quantflo.signals.dsl; import quantflo.execution; import quantflo.portfolio; import quantflo.risk; import quantflo.analytics; import quantflo.analytics.exporters; import quantflo.strategy; import quantflo.api; import quantflo.db; print\\('ALL_MODULES_IMPORTABLE'\\)\")",
+      "Bash(where python:*)",
+      "Bash(\"C:\\\\Users\\\\Python\\\\Python312\\\\python.exe\" --version)",
+      "Bash(\"C:\\\\Users\\\\Python\\\\Python312\\\\python.exe\" -m venv .venv)",
+      "Bash(.venv/Scripts/python.exe -m pip install --upgrade pip wheel setuptools)",
+      "Bash(.venv/Scripts/python.exe -m pip install -r requirements-dev.txt)",
+      "Bash(.venv/Scripts/python.exe -c \"import numpy, duckdb, pyarrow, pydantic, sqlalchemy, asyncpg, httpx, structlog, apscheduler, pandas_ta, pytest; print\\('numpy', numpy.__version__\\); print\\('duckdb', duckdb.__version__\\); print\\('pyarrow', pyarrow.__version__\\); print\\('pydantic', pydantic.__version__\\); print\\('sqlalchemy', sqlalchemy.__version__\\); print\\('asyncpg', asyncpg.__version__\\); print\\('httpx', httpx.__version__\\); print\\('structlog', structlog.__version__\\); print\\('apscheduler', apscheduler.__version__\\); print\\('pandas_ta', pandas_ta.version\\); print\\('pytest', pytest.__version__\\); print\\('OK — all S1 deps importable'\\)\")",
+      "Bash(.venv/Scripts/python.exe -c \"import tomllib; t=tomllib.load\\(open\\('pyproject.toml','rb'\\)\\); print\\('build-backend:', t['build-system']['build-backend']\\)\")",
+      "Bash(.venv/Scripts/python.exe -m pip install --dry-run -e .)",
+      "Bash(backend/.venv/Scripts/python.exe -c ':*)",
+      "Bash(where psql:*)",
+      "Bash(where pg_isready)",
+      "Bash(d:/Projects/quantflo/backend/.venv/Scripts/python.exe -c 'import socket; s=socket.socket\\(\\); s.settimeout\\(1\\);:*)",
+      "Bash(\"C:/Program Files/PostgreSQL/17/bin/psql.exe\" -h localhost -U postgres -lqt)",
+      "Bash(kill b1qimk4x4:*)",
+      "Bash(backend/.venv/Scripts/python.exe sprints/S1/design/_scaffold_diff.py)",
+      "Bash(backend/.venv/Scripts/python.exe sprints/S1/design/_make_stubs.py)",
+      "Bash(backend/.venv/Scripts/python.exe -)",
+      "Bash(.venv/Scripts/python.exe -c ':*)",
+      "Bash(backend/.venv/Scripts/python.exe sprints/S1/design/_task_plan.py)",
+      "Bash(backend/.venv/Scripts/python.exe sprints/S1/design/_probe.py)",
+      "Bash(backend/.venv/Scripts/python.exe sprints/S1/design/_jsonfix.py)",
+      "Skill(ases-validate)",
+      "Bash(python3 -c \"import json; data=json.load\\(open\\('sprints/S1/design/lld.json'\\)\\); files=[f for f in data.get\\('files',[]\\) if f.get\\('path'\\)=='backend/quantflo/analytics/drawdown.py']; print\\(json.dumps\\(files, indent=2\\)\\)\")",
+      "Bash(python -c \"import json; data=json.load\\(open\\('sprints/S1/design/lld.json'\\)\\); files=[f for f in data.get\\('files',[]\\) if f.get\\('path'\\)=='backend/quantflo/analytics/drawdown.py']; print\\(json.dumps\\(files, indent=2\\)\\)\")",
+      "Bash(python -c \"import json; data=json.load\\(open\\('sprints/S1/design/test_cases.json'\\)\\); tcs=[t for t in data.get\\('test_cases',[]\\) if t.get\\('id'\\)=='TC-066']; print\\(json.dumps\\(tcs, indent=2\\)\\)\")",
+      "Bash(claude:*)",
+      "Bash(.venv/Scripts/python.exe -m ruff check quantflo/analytics/drawdown.py)",
+      "Bash(.venv/Scripts/python.exe -m mypy --strict quantflo/analytics/drawdown.py)",
+      "Bash(python -c ':*)"
+    ]
+  }
+}

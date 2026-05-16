@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASES v3.0 — Command Centre</title>
+  <title>ASES v3.1 — Command Centre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap"
@@ -1194,11 +1194,12 @@
   <div class="tb">
     <div class="tb-brand">
       <div class="tb-logo">A<span>S</span>ES</div>
-      <div class="tb-v">v3.0</div>
+      <div class="tb-v">v3.1</div>
     </div>
     <nav class="tb-nav">
       <a href="#context" class="nv">Context</a>
       <a href="#pipeline" class="nv">Pipeline</a>
+      <a href="#skills" class="nv">Skills</a>
       <a href="#structure" class="nv">Structure</a>
       <a href="#hook" class="nv">Hook</a>
       <a href="#gates" class="nv">Gates</a>
@@ -1227,6 +1228,7 @@
   <div class="tb-drawer" id="drawer">
     <a href="#context" class="nv" onclick="closeDrawer()">Context</a>
     <a href="#pipeline" class="nv" onclick="closeDrawer()">Pipeline</a>
+    <a href="#skills" class="nv" onclick="closeDrawer()">Skills</a>
     <a href="#structure" class="nv" onclick="closeDrawer()">Structure</a>
     <a href="#hook" class="nv" onclick="closeDrawer()">Hook</a>
     <a href="#gates" class="nv" onclick="closeDrawer()">Gates</a>
@@ -1252,15 +1254,15 @@
     <!-- Hero -->
     <div class="hero">
       <div class="hero-main">
-        <div class="hero-eye">AI Scrum Engineering System · Claude Code Edition</div>
+        <div class="hero-eye">AI Scrum Engineering System · Cross-Platform Edition</div>
         <div class="hero-title">A<em>S</em>ES<br>Command<br>Centre</div>
-        <div class="hero-desc">Three-level context architecture. CARL-inspired hooks. Claude-mem inspired just-in-time
-          injection. Identifier-addressed global history. Tight Sonnet execution contracts. Seven-category upgrade from
-          v2.</div>
+        <div class="hero-desc">Three-level context architecture. CARL-inspired hooks. Batch execution mode.
+          Identifier-addressed global history. Phase 3 fix loops. Cross-platform (Claude Code + Kilo Code).
+          Model-agnostic 3-slot routing.</div>
         <div class="hero-stats">
           <div>
-            <div class="stat-n">23</div>
-            <div class="stat-l">Commands</div>
+            <div class="stat-n">36</div>
+            <div class="stat-l">Skills</div>
           </div>
           <div>
             <div class="stat-n">3</div>
@@ -1271,7 +1273,7 @@
             <div class="stat-l">ID Prefixes</div>
           </div>
           <div>
-            <div class="stat-n">10</div>
+            <div class="stat-n">13</div>
             <div class="stat-l">Hard Rules</div>
           </div>
         </div>
@@ -1389,7 +1391,7 @@
     <div class="model-row">
       <div class="mc opus">
         <div class="mc-layer">Reasoning Layer</div>
-        <div class="mc-name">Claude Opus 4.6</div>
+        <div class="mc-name">Claude Opus 4.7</div>
         <div class="mc-role">Planning, architecture, critique, test design, scaffold specs. All reasoning-heavy stages.
         </div>
         <div class="mc-tags"><span class="mc-tag">planner</span><span class="mc-tag">architect</span><span
@@ -1398,7 +1400,7 @@
       </div>
       <div class="mc sonnet">
         <div class="mc-layer">Execution Layer</div>
-        <div class="mc-name">Claude Sonnet</div>
+        <div class="mc-name">Claude Sonnet 4.6</div>
         <div class="mc-role">Code gen, fixes, test impl, scaffolding, devops. Writes only to output_files[] from plan.
           No inference.</div>
         <div class="mc-tags"><span class="mc-tag">developer</span><span class="mc-tag">tester-impl</span><span
@@ -1425,7 +1427,7 @@
     <div id="pipeline" class="sh">
       <div class="sl">Full Pipeline</div>
       <div class="sline"></div>
-      <div class="sid">23 COMMANDS · 3 PHASES</div>
+      <div class="sid">36 SKILLS · 3 PHASES</div>
     </div>
     <div class="pipe-wrap">
 
@@ -1583,9 +1585,9 @@
             <div class="parr">→</div>
           </div>
           <div class="ps">
-            <div class="pn on">
+            <div class="pn sn">
               <div class="pc">/validate</div>
-              <div class="pa">Architect</div>
+              <div class="pa">Sonnet</div>
               <div class="pg8">PROCEED</div>
             </div>
             <div class="parr">→</div>
@@ -1602,7 +1604,7 @@
             <div class="pn on">
               <div class="pc">/critique</div>
               <div class="pa">Critic</div>
-              <div class="pg8">max×3</div>
+              <div class="pg8">smart cap 3–5</div>
             </div>
             <div class="ploop">⟳</div>
           </div>
@@ -1615,9 +1617,32 @@
             <div class="parr">→</div>
           </div>
           <div class="ps">
+            <div class="pn yn" style="border-left:2px dashed var(--warn);">
+              <div class="pc" style="font-size:8.5px;color:var(--warn);">OR BATCH MODE ↓</div>
+            </div>
+            <div class="parr">→</div>
+          </div>
+          <div class="ps">
+            <div class="pn sn">
+              <div class="pc">/batch-exec</div>
+              <div class="pa">Sonnet</div>
+              <div class="pg8">validate+dev</div>
+            </div>
+            <div class="parr">→</div>
+          </div>
+          <div class="ps">
+            <div class="pn on">
+              <div class="pc">/batch-critique</div>
+              <div class="pa">Critic</div>
+              <div class="pg8">smart cap 3–5</div>
+            </div>
+            <div class="parr">→</div>
+          </div>
+          <div class="ps">
             <div class="pn on">
               <div class="pc">/sprint-close</div>
               <div class="pa">Planner</div>
+              <div class="pg8">blocks in_progress</div>
             </div>
           </div>
         </div>
@@ -1639,9 +1664,18 @@
             <div class="parr">→</div>
           </div>
           <div class="ps">
+            <div class="pn sn">
+              <div class="pc">/test-run</div>
+              <div class="pa">Sonnet</div>
+              <div class="pg8">regression + fix×3</div>
+            </div>
+            <div class="parr">→</div>
+          </div>
+          <div class="ps">
             <div class="pn on">
               <div class="pc">/integration-test</div>
               <div class="pa">Opus→Sonnet</div>
+              <div class="pg8">run + fix×3</div>
             </div>
             <div class="parr">→</div>
           </div>
@@ -1687,6 +1721,79 @@
       </div>
     </div>
 
+    <!-- Skill Reference -->
+    <div id="skills" class="sh">
+      <div class="sl">Skill Reference</div>
+      <div class="sline"></div>
+      <div class="sid">36 SKILLS · SEQUENTIAL ORDER</div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="ph-head"><div class="ph-badge pb-proj">Project Start</div><div class="ph-title">One-time initialisation — runs once per project</div></div>
+    </div>
+    <div class="rules-grid" style="margin-bottom:24px;">
+      <div class="rc" style="border-left-color:var(--human);"><div class="rc-n" style="color:var(--human);font-size:11px;">/interview</div><div class="rc-t">Opus conducts a structured interview with the PO to extract project requirements, constraints, tech stack preferences, and business goals. All ambiguity is resolved here — no re-asking mid-pipeline. Produces brief.json as the single source of truth for all downstream skills.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/prd</div><div class="rc-t">Planner (Opus) transforms the interview brief into a versioned Product Requirements Document with features, acceptance criteria, and priority tiers. Every feature gets explicit AC items that later drive test case generation. The PRD is the contract between PO intent and engineering execution.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/hld</div><div class="rc-t">Architect (Opus) designs the high-level system architecture: modules, data flows, API boundaries, technology choices. Each module gets a unique M-NNN identifier used throughout the pipeline. Produces the module dependency graph that drives sprint decomposition.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/roadmap</div><div class="rc-t">Planner allocates features across sprints based on dependency order, risk, and complexity. This is a mandatory PO approval gate — the roadmap governs the entire project timeline. Each sprint gets a goal statement and feature list that Phase 1 uses to generate the LLD.</div></div>
+      <div class="rc" style="border-left-color:var(--muted);"><div class="rc-n" style="color:var(--dim);font-size:11px;">/init</div><div class="rc-t">System skill that bootstraps the .ases/ directory, context.json, decisions.json, and the monorepo folder skeleton (backend/, frontend/, contracts/, docs/). No AI reasoning — purely mechanical directory creation. Sets up the runtime state that hooks and skills depend on.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/scaffold</div><div class="rc-t">Two-step skill: Opus writes scaffold_spec.json (exact file list, boilerplate content, dependency manifests), then Sonnet executes it mechanically. Creates the backend app structure, venv, requirements.txt, frontend package.json, and all config files. Runs graphify update at end to build the initial knowledge graph. Sonnet does not start until the spec exists.</div></div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="ph-head"><div class="ph-badge pb-d1">Phase 1 — Sprint Design</div><div class="ph-title">Deterministic sprint specs</div></div>
+    </div>
+    <div class="rules-grid" style="margin-bottom:24px;">
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/prd-update</div><div class="rc-t">Optional skill that increments the PRD version with new features, modified AC, or scope changes discovered during previous sprints. Maintains backward compatibility — existing features are never silently altered. Triggers re-validation of downstream LLD and test specs.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/lld</div><div class="rc-t">Architect produces the Low-Level Design: file-level decomposition with function signatures, interfaces, depends_on[] arrays, and data types. Every file in the sprint gets an explicit contract. The LLD is the binding interface contract that /dev must implement exactly.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/schema</div><div class="rc-t">Architect generates the database schema design: tables, columns, types, constraints, indexes, and migration SQL. Produces schema.json that sprint-scaffold uses to create migration stubs. Schema changes mid-sprint are applied via Step 4.5 in /dev.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/test-spec</div><div class="rc-t">Tester (Opus) derives test cases exclusively from PRD acceptance_criteria — never invented. Each test case maps to a specific AC item with expected inputs, outputs, and edge conditions. These test cases drive /test-impl code generation in Phase 3.</div></div>
+      <div class="rc" style="border-left-color:var(--warn);"><div class="rc-n" style="color:var(--warn);font-size:11px;">/sprint-gate</div><div class="rc-t">Critic (Opus) performs a deterministic pass/fail check: LLD completeness, schema consistency, test coverage mapping, and cross-file dependency validation. On PASS, writes sprint_context.json and triggers a mandatory PO approval gate before Phase 2 begins.</div></div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="ph-head"><div class="ph-badge pb-d2">Phase 2 — Sprint Execution</div><div class="ph-title">Setup → UI Track → Task Loop / Batch</div></div>
+    </div>
+    <div class="rules-grid" style="margin-bottom:24px;">
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/analyze</div><div class="rc-t">Architect reads the current codebase state, compares it against the LLD, and produces an analysis report identifying what exists, what’s missing, and what needs modification. If graphify-out/GRAPH_REPORT.md exists, uses god nodes and graph edges to detect dependency drift. Output verdict READY gates sprint-scaffold.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/sprint-scaffold</div><div class="rc-t">Two-step: Opus identifies new files + dependency changes, then Sonnet creates them. Includes Step B.5 for applying database migrations via psql. Runs graphify update at end to capture new files in the knowledge graph. Only creates structure — no feature logic.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/tasks</div><div class="rc-t">Task Manager (Opus) decomposes the LLD into individual implementation tasks with dependency graphs, parallel groups, and execution order. Each task gets a plan.json with exact output_files[], depends_on[], and pseudo-code. This is the work breakdown that batch-exec consumes.</div></div>
+      <div class="rc" style="border-left-color:var(--gemini);"><div class="rc-n" style="color:var(--gemini);font-size:11px;">/ui-design</div><div class="rc-t">Gemini designs the UI component specification: layout, interactions, responsive breakpoints, and API integration points. Defines api.ts as the single integration boundary and mocks.ts for development. Only runs if the sprint contains UI tasks.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/ui-review</div><div class="rc-t">Critic (Opus) validates Gemini's UI spec against PRD acceptance criteria, responsive requirements, and accessibility standards. Verdict APPROVED gates /ui-scaffold. Catches design-spec drift before any frontend code is generated.</div></div>
+      <div class="rc" style="border-left-color:var(--gemini);"><div class="rc-n" style="color:var(--gemini);font-size:11px;">/ui-scaffold</div><div class="rc-t">Gemini builds the complete standalone frontend scaffold with all components, routing, and mock data. The scaffold is locked after creation — execution agents may only touch declared integration_points. Produces ui_scaffold_manifest.json that the hook enforces.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/validate</div><div class="rc-t">Sonnet runs four pre-flight checks per task: input files exist, interface contracts intact, scope boundaries clear (no overlap with in-progress tasks), and all dependencies complete. Verdict PROCEED gates /dev. HOLD includes suggested resolution.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/dev</div><div class="rc-t">Sonnet implements exactly one task per invocation, writing only to output_files[] from the task plan. Reads the instruction packet (plan, LLD, schema, decisions), follows pseudo-code exactly, and writes a pre-dev snapshot. Includes Step 4.5 for mid-sprint DB migration execution.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/critique</div><div class="rc-t">Critic (Opus) applies five lenses: spec compliance, contract integrity, test coverage, security, and structural (graph-assisted call graph checks, if graph exists). Detection only — never rewrites code. Smart iteration cap: escalates after 3 if stalling, hard cap at 5. ESCALATE presents PO with 5 structured options.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/fix</div><div class="rc-t">Sonnet applies targeted fixes from critique findings. Scope-locked to the same output_files[] as the original /dev task. Reads the critique JSON for exact fix instructions, applies them, and writes a fix snapshot. Returns to /critique for re-evaluation.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/batch-exec</div><div class="rc-t">Combined validate+dev in a single Sonnet session for all eligible tasks (dependencies satisfied, not complete/deferred). Runs Phase 1 (batch validate) then Phase 2 (batch dev) sequentially. Runs graphify update at end to refresh the knowledge graph for critique. Primary execution mode — saves significant token overhead.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/batch-validate</div><div class="rc-t">Standalone batch validate for targeted pre-flight. Same four checks as /validate but across all eligible tasks in one session. Use when you want validation only without implementation — pairs with /batch-dev for a two-step workflow.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/batch-dev</div><div class="rc-t">Standalone batch dev for all validated tasks in one Sonnet session. Requires validation_$TASK_ID.json with verdict PROCEED for each task. Implements tasks in topological order respecting parallel groups. Same constraints as per-task /dev.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/batch-critique</div><div class="rc-t">Opus runs the full 5-lens critique (including structural graph checks) on all in_progress tasks in one session. CLEAN tasks marked complete immediately. FIX_REQUIRED tasks route to per-task /fix. Same smart cap (3–5 iterations) and structured escalation as single-task /critique.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/sprint-close</div><div class="rc-t">Planner closes the sprint: runs graphify update for a clean graph, then classifies tasks (completed/deferred/escalated), collects new ADR entries, logs tech debt, and creates carry-forward items. Pre-check blocks close if any task is still in_progress — PO must resolve each one first. Clears sprint_context.json.</div></div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="ph-head"><div class="ph-badge pb-d3">Phase 3 — Sprint Ship</div><div class="ph-title">Testing → UAT → DevOps → Audit → Release</div></div>
+    </div>
+    <div class="rules-grid" style="margin-bottom:24px;">
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/test-impl</div><div class="rc-t">Sonnet implements test specifications from test_cases.json as executable pytest files. Strict naming convention: test_{tc_id_lowercase}_{description}. Maps each test to backend/tests/{unit,integration,system}/ directories. Produces test_suite.json with coverage map and run commands.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/test-run</div><div class="rc-t">Executes all written tests and captures results. Runs regression check against all previous sprint tests first. Failed tests trigger a fix loop: map failing test → source task → /fix, re-run, max 3 attempts. Gate: all critical-priority tests must pass before proceeding to integration tests.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/integration-test</div><div class="rc-t">Two-step: Opus designs cross-module integration scenarios from HLD data flows, then Sonnet implements and executes them. Step C runs the tests with a fix loop (max 3). One test file per scenario with strict naming. Mocks only external boundaries — internal modules called directly.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/system-test</div><div class="rc-t">Two-step: Opus designs NFR scenarios with numeric thresholds (response time, throughput, memory), then Sonnet executes them. Tests performance, security, and reliability against measurable pass/fail criteria defined in the PRD.</div></div>
+      <div class="rc" style="border-left-color:var(--human);"><div class="rc-n" style="color:var(--human);font-size:11px;">/uat</div><div class="rc-t">PO reviews the running system against every acceptance criteria item. This is a mandatory human gate — the PO tests the actual deployed application. Rejected items get surgical re-entry paths. Verdict APPROVED or CONDITIONAL gates /devops and eventual git commit.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/devops</div><div class="rc-t">Sonnet generates deployment configuration: Dockerfiles, CI/CD pipelines, environment configs, and health checks. Commit is hook-gated — only allowed after UAT approval. Produces devops_log.json documenting all infrastructure decisions and deployment steps.</div></div>
+      <div class="rc" style="border-left-color:var(--warn);"><div class="rc-n" style="color:var(--warn);font-size:11px;">/final-audit</div><div class="rc-t">Critic performs a comprehensive sprint audit: code quality, test coverage, security posture, documentation completeness, and ADR consistency. Verdict SHIP requires mandatory PO approval before /release can execute. BLOCK routes to surgical re-entry with exact fix paths.</div></div>
+      <div class="rc" style="border-left-color:var(--opus);"><div class="rc-n" style="color:var(--opus);font-size:11px;">/release</div><div class="rc-t">Planner writes the sprint summary, CHANGELOG entries, and global context entries (SP-NNN sprint digest, FT-NNN features shipped, TD-NNN tech debt logged). Archives sprint state to global_context.json with typed IDs. This is the final skill in the sprint lifecycle.</div></div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="ph-head"><div class="ph-badge" style="background:var(--s2);border:1px solid var(--b2);color:var(--dim);">Utility Skills</div><div class="ph-title">Context management — invoked on demand</div></div>
+    </div>
+    <div class="rules-grid" style="margin-bottom:44px;">
+      <div class="rc" style="border-left-color:var(--human);"><div class="rc-n" style="color:var(--human);font-size:11px;">/inject</div><div class="rc-t">Selectively injects specific global context entries by ID (e.g., /ases-inject DS-003 SP-001). PO-facing command — the only way agents can access global_context.json entries mid-sprint without loading the entire file.</div></div>
+      <div class="rc" style="border-left-color:var(--sonnet);"><div class="rc-n" style="color:var(--sonnet);font-size:11px;">/graphify</div><div class="rc-t">Builds or updates the project knowledge graph using tree-sitter AST extraction (Pass 1 only — zero LLM cost). Also runs automatically as a sub-step of /scaffold, /sprint-scaffold, /batch-exec, and /sprint-close. Produces graphify-out/graph.json and GRAPH_REPORT.md consumed by /analyze (dependency drift detection) and /critique (Lens 5 structural checks). Context bracket aware — skips when DEPLETED/CRITICAL.</div></div>
+    </div>
+
     <!-- Folder Structure -->
     <div id="structure" class="sh">
       <div class="sl">Folder Structure</div>
@@ -1708,19 +1815,26 @@
 
           <span class="dir">/.claude/</span>
           settings.json <span class="comment">← hooks + model</span>
-          ases-hook.py <span class="comment">← CARL-inspired</span>
-          skills/ases-*/SKILL.md <span class="comment">← 23 skills</span>
+          hooks/ases-hook.py <span class="comment">← CARL-inspired</span>
+          skills/ases-*/SKILL.md <span class="comment">← 36 skills</span>
           agents/{planner,architect, <span class="comment">← agent defs</span>
           critic,developer}.md
           commands/ases-*.md <span class="comment">← utilities</span>
-          system.yaml <span class="comment">← config</span>
+          system.yaml <span class="comment">← 3-slot routing</span>
+
+          <span class="dir">/.kilo/</span> <span class="comment">← Kilo Code mirror</span>
+          kilo.jsonc <span class="comment">← permissions</span>
+          plugin/ases-guard.ts <span class="comment">← TS hook port</span>
+          skills/ agents/ rules/ <span class="comment">← same 36 skills</span>
 
           <span class="dir">/format/</span>
           json/*.schema.json <span class="comment">← excluded from scan</span>
           markdown/*.template.md <span class="comment">← excluded from scan</span>
 
-          .claudeignore <span class="comment">← access control</span>
+          .claudeignore <span class="comment">← Claude Code</span>
+          .kilocodeignore <span class="comment">← Kilo Code</span>
           CLAUDE.md <span class="comment">← always-loaded</span>
+          AGENTS.md <span class="comment">← Kilo equivalent</span>
         </div>
       </div>
       <div class="folder-card">
@@ -1753,7 +1867,13 @@
           devops_log.json+md · final_audit.json+md
           sprint_summary.json+md · release.json+md
 
-          <span class="dir">/src/</span> /ui/ /tests/{unit,integration,system}/
+          <span class="dir">/backend/</span> <span class="comment">← FastAPI / Python</span>
+          <span class="dir">/frontend/</span> <span class="comment">← Next.js/React (locked)</span>
+          <span class="dir">/backend/tests/</span>{unit,integration,system}/
+
+          <span class="dir">/graphify-out/</span> <span class="comment">← knowledge graph (excluded)</span>
+          graph.json · GRAPH_REPORT.md
+          graph.html <span class="comment">← interactive viz</span>
           CHANGELOG.md
         </div>
       </div>
@@ -1788,9 +1908,9 @@
       </div>
       <div class="hk">
         <div class="hk-title">Job 4 — UI Scaffold Guard</div>
-        <div class="hk-desc">Blocks Write to /ui/ paths not declared in ui_scaffold_manifest integration_points[].
+        <div class="hk-desc">Blocks Write to frontend/ paths not declared in ui_scaffold_manifest integration_points[].
           Gemini's scaffold is locked. Replaces guard_ui_scaffold.py. Combined with Jobs 1-3 in single hook.</div>
-        <div class="hk-trigger">Trigger: Write to ui/**</div>
+        <div class="hk-trigger">Trigger: Write to frontend/**</div>
       </div>
     </div>
 
@@ -1940,23 +2060,23 @@
       </div>
       <div class="rc">
         <div class="rc-n">03</div>
-        <div class="rc-t">Sonnet writes only output_files[] from task plan — scope is explicit, not inferred</div>
+        <div class="rc-t">Execution agent writes only output_files[] from task plan — scope is explicit, not inferred</div>
       </div>
       <div class="rc">
         <div class="rc-n">04</div>
-        <div class="rc-t">Critique loop mandatory — max 3 iterations then escalate to PO</div>
+        <div class="rc-t">Critique loop mandatory — smart cap: 3 if stalling, 5 max, then escalate to PO</div>
       </div>
       <div class="rc">
         <div class="rc-n">05</div>
-        <div class="rc-t">scaffold_spec.json gates Sonnet — Opus writes spec first, Sonnet confirms before acting</div>
+        <div class="rc-t">scaffold_spec.json gates execution — Reasoning writes spec first, Execution confirms before acting</div>
       </div>
       <div class="rc">
         <div class="rc-n">06</div>
-        <div class="rc-t">Sonnet never touches Gemini UI scaffold — only declared integration_points</div>
+        <div class="rc-t">Execution agent never touches Gemini UI scaffold — only declared integration_points</div>
       </div>
       <div class="rc">
         <div class="rc-n">07</div>
-        <div class="rc-t">Git commit only after UAT approval — ases-hook.py enforces at system level</div>
+        <div class="rc-t">Git commit only after UAT approval — ases-hook.py / ases-guard.ts enforces at system level</div>
       </div>
       <div class="rc">
         <div class="rc-n">08</div>
@@ -1970,13 +2090,25 @@
         <div class="rc-n">10</div>
         <div class="rc-t">Global context PO-only — hook blocks agent reads unless PO-facing command</div>
       </div>
+      <div class="rc">
+        <div class="rc-n">11</div>
+        <div class="rc-t">Test execution (/test-run) required before integration tests — regression check mandatory</div>
+      </div>
+      <div class="rc">
+        <div class="rc-n">12</div>
+        <div class="rc-t">Phase 3 fix loop — max 3 iterations per failing test, then escalate to PO</div>
+      </div>
+      <div class="rc">
+        <div class="rc-n">13</div>
+        <div class="rc-t">Sprint-close blocks if any task has status: in_progress — must complete, defer, or escalate first</div>
+      </div>
     </div>
 
     <div class="footer">
       <div class="footer-truth">This is not prompting — this is an <span>AI software factory.</span></div>
       <div class="footer-meta">
-        ASES v3.0 · 23 Commands · 3 Context Levels · 6 ID Types · 10 Rules · 6 Gates<br>
-        Opus 4.6 · Claude Sonnet · Gemini 3.1 Pro · Human PO · CARL-inspired hook
+        ASES v3.1 · 36 Skills · 3 Context Levels · 6 ID Types · 13 Rules · 6 Gates<br>
+        Opus 4.7 · Sonnet 4.6 · Gemini 3.1 Pro · Human PO · Claude Code + Kilo Code
       </div>
     </div>
 

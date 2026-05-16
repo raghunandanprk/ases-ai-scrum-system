@@ -1,35 +1,36 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "ui_spec",
-  "produced_by": "/ui-design",
-  "consumed_by": ["/ui-review", "/ui-scaffold"],
-  "sprint_id": "S1",
-  "components": [
-    {
-      "id": "C-001",
-      "name": "",
-      "task_ref": "T-005",
-      "feature_ref": "F-003",
-      "ac_refs": ["AC-007"],
-      "type": "page | layout | component | modal | form",
-      "route": "/dashboard",
-      "framework": "nextjs",
-      "styling": "tailwind",
-      "props": [
-        { "name": "", "type": "", "required": true, "description": "" }
-      ],
-      "state": [
-        { "name": "", "type": "", "initial": null, "description": "" }
-      ],
-      "interactions": [
-        { "event": "", "action": "", "description": "" }
-      ],
-      "api_dependencies": [
-        { "endpoint": "", "method": "GET | POST | PUT | DELETE", "on": "mount | interaction" }
-      ],
-      "responsive": true,
-      "accessibility_notes": "",
-      "mock_data_ref": "/ui/mocks/"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/ui_spec",
+  "title": "ASES UI Component Specification",
+  "description": "Produced by /ases-ui-design. Consumed by /ases-ui-review, /ases-ui-scaffold.",
+  "type": "object",
+  "required": ["sprint_id", "components"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "task_ref", "feature_ref", "type"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^C-\\d{3}$" },
+          "name": { "type": "string" },
+          "task_ref": { "type": "string" },
+          "feature_ref": { "type": "string" },
+          "ac_refs": { "type": "array", "items": { "type": "string" } },
+          "type": { "type": "string", "enum": ["page", "layout", "component", "modal", "form"] },
+          "route": { "type": "string" },
+          "framework": { "type": "string" },
+          "styling": { "type": "string" },
+          "props": { "type": "array", "items": { "type": "object" } },
+          "state": { "type": "array", "items": { "type": "object" } },
+          "interactions": { "type": "array", "items": { "type": "object" } },
+          "api_dependencies": { "type": "array", "items": { "type": "object" } },
+          "responsive": { "type": "boolean" },
+          "accessibility_notes": { "type": "string" },
+          "mock_data_ref": { "type": "string" }
+        }
+      }
     }
-  ]
+  }
 }

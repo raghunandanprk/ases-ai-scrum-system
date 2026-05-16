@@ -1,21 +1,30 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "uat_report",
-  "produced_by": "/uat",
-  "consumed_by": ["/devops", "/final-audit", "/release"],
-  "sprint_id": "S1",
-  "reviewed_by": "PO",
-  "reviewed_at": "",
-  "items": [
-    {
-      "ac_ref": "AC-001",
-      "feature_ref": "F-001",
-      "description": "",
-      "verdict": "accepted | accepted_with_notes | rejected",
-      "notes": ""
-    }
-  ],
-  "rejected_items": [],
-  "conditional_notes": [],
-  "verdict": "APPROVED | CONDITIONAL | REJECTED"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/uat_report",
+  "title": "ASES UAT Report",
+  "description": "Produced by /ases-uat. Consumed by /ases-devops, /ases-final-audit, /ases-release.",
+  "type": "object",
+  "required": ["sprint_id", "reviewed_by", "reviewed_at", "items", "verdict"],
+  "properties": {
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "reviewed_by": { "type": "string" },
+    "reviewed_at": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ac_ref", "feature_ref", "verdict"],
+        "properties": {
+          "ac_ref": { "type": "string" },
+          "feature_ref": { "type": "string" },
+          "description": { "type": "string" },
+          "verdict": { "type": "string", "enum": ["accepted", "accepted_with_notes", "rejected"] },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "rejected_items": { "type": "array", "items": { "type": "string" } },
+    "conditional_notes": { "type": "array", "items": { "type": "string" } },
+    "verdict": { "type": "string", "enum": ["APPROVED", "CONDITIONAL", "REJECTED"] }
+  }
 }

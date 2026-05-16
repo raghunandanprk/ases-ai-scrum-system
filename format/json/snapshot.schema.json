@@ -1,13 +1,19 @@
 {
-  "$schema": "ases/v2.0",
-  "document": "snapshot",
-  "produced_by": "/dev",
-  "consumed_by": ["/rollback"],
-  "task_id": "T-001",
-  "sprint_id": "S1",
-  "snapshot_type": "pre_fix | post_fix | post_dev",
-  "iteration": 0,
-  "timestamp": "",
-  "files_written": [],
-  "file_hashes": {}
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ases/v3.0/snapshot",
+  "title": "ASES Task Snapshot",
+  "description": "Produced by /ases-dev, /ases-fix. Consumed by /ases-rollback.",
+  "type": "object",
+  "required": ["task_id", "sprint_id", "snapshot_type", "timestamp"],
+  "properties": {
+    "task_id": { "type": "string", "pattern": "^T-\\d{3}$" },
+    "sprint_id": { "type": "string", "pattern": "^S\\d+$" },
+    "snapshot_type": { "type": "string", "enum": ["pre_dev", "post_fix", "post_dev"] },
+    "iteration": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "files_in_scope": { "type": "array", "items": { "type": "string" } },
+    "files_modified": { "type": "array", "items": { "type": "string" } },
+    "issues_addressed": { "type": "array", "items": { "type": "string" } },
+    "file_hashes": { "type": "object", "additionalProperties": { "type": "string" } }
+  }
 }
