@@ -1,15 +1,16 @@
 /**
- * ASES Guard v3.1 — ases-guard.ts
+ * ASES Guard v3.2 — ases-guard.ts
  * Kilo Code Plugin Port of ases-hook.py
  *
  * Context Augmentation Layer for the AI Scrum Engineering System.
  * Runs as tool.execute.before on every ASES command.
  *
- * Four jobs:
- *   1. Context injection — levels 2+3 into every session
+ * Five jobs:
+ *   1. Context injection — levels 2+3 + sub-agent config into every session
  *   2. PO-only file access guard — blocks reads of protected files
  *   3. Commit guard — blocks git commit unless UAT approved
  *   4. UI scaffold guard — blocks writes to frontend/ outside integration_points
+ *   5. Sub-agent config injection — reads system.yaml sub_agents section
  */
 
 import type { Plugin } from "@kilocode/plugin";
@@ -73,6 +74,47 @@ function isPOCommand(cmd: string): boolean {
   return PO_FACING_COMMANDS.some((poc) => cmd.includes(poc));
 }
 
+function loadSubAgentConfig(root: string): Record<string, any> {
+  const yamlPaths = [
+    join(root, ".kilo", "system.yaml"),
+    join(root, ".claude", "system.yaml"),
+  ];
+  for (const yamlPath of yamlPaths) {
+    if (!existsSync(yamlPath)) continue;
+    try {
+      const text = readFileSync(yamlPath, "utf-8");
+      const config: Record<string, any> = {};
+      let inSection = false;
+      for (const line of text.split("\n")) {
+        const stripped = line.trim();
+        if (stripped.startsWith("sub_agents:")) {
+          inSection = true;
+          continue;
+        }
+        if (inSection) {
+          if (stripped && !stripped.startsWith("#") && !line.startsWith(" ")) {
+            break; // Left the sub_agents section
+          }
+          if (stripped.includes(":") && !stripped.startsWith("#")) {
+            const [key, ...rest] = stripped.split(":");
+            const val = rest.join(":").trim().split("#")[0].trim();
+            if (val.toLowerCase() === "true") config[key.trim()] = true;
+            else if (val.toLowerCase() === "false") config[key.trim()] = false;
+            else {
+              const num = parseInt(val, 10);
+              config[key.trim()] = isNaN(num) ? val : num;
+            }
+          }
+        }
+      }
+      return config;
+    } catch {
+      return {};
+    }
+  }
+  return {};
+}
+
 // ── JOB 1: CONTEXT INJECTION ────────────────────────────────────────
 
 function buildInjection(root: string, bracket: string): string {
@@ -131,6 +173,19 @@ function buildInjection(root: string, bracket: string): string {
   // CRITICAL warning
   if (bracket === "CRITICAL") {
     lines.push("⚠ CONTEXT CRITICAL — run /compact before continuing");
+  }
+
+  // Sub-agent config injection
+  const saConfig = loadSubAgentConfig(root);
+  if (saConfig.enabled) {
+    const saParts = [`sub_agents=${saConfig.enabled ?? false}`];
+    if (saConfig.context_window !== undefined) {
+      saParts.push(`context_window=${saConfig.context_window}`);
+    }
+    if (saConfig.threshold !== undefined) {
+      saParts.push(`threshold=${saConfig.threshold}`);
+    }
+    lines.push(saParts.join(" "));
   }
 
   lines.push("</ases-state>");

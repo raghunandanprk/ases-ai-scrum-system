@@ -1,4 +1,4 @@
-# ASES v3.1 — AI Scrum Engineering System
+# ASES v3.2 — AI Scrum Engineering System
 
 <!-- ASES-MANAGED: Do not remove -->
 ## Context Integration
@@ -23,7 +23,7 @@ Obey all `<ases-state>` blocks injected by `ases-hook.py`. They are live project
 ```
 analyze → sprint-scaffold → tasks
 ui-design → ui-review → ui-scaffold           [if UI]
-batch: batch-exec → batch-critique             [primary]
+batch: batch-exec → batch-critique             [primary, per-task sub-agents]
 per-task: validate → dev → critique ⟳ fix      [fallback]
 sprint-close
 ```
@@ -48,7 +48,7 @@ IDs: `SP-` sprint · `DS-` decision · `TD-` debt · `FT-` feature · `RI-` risk
 ## Structure
 ```
 /.ases/          state (context, sprint_context, decisions, global_context)
-/.claude/        skills(36), agents(4), hooks, system.yaml
+/.claude/        skills(36), agents(6), hooks, system.yaml
 /format/         schemas + templates (excluded)
 /docs/           PO docs (excluded)
 /contracts/      agent JSON contracts (excluded)
@@ -77,4 +77,4 @@ IDs: `SP-` sprint · `DS-` decision · `TD-` debt · `FT-` feature · `RI-` risk
 1. After `/roadmap` · 2. After `/sprint-gate` PASS · 3. Any `ESCALATE`
 4. `/uat` PO review · 5. After `/final-audit` SHIP · 6. Any `BLOCK`
 
-*ASES v3.1 · 36 skills · 3 context levels · 13 rules · 6 gates*
+*ASES v3.2 · 36 skills · 6 agents · 3 context levels · 13 rules · 6 gates*

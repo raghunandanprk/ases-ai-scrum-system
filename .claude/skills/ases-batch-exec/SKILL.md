@@ -1,17 +1,17 @@
 ---
 name: ases-batch-exec
 description: >
-  ASES Sprint Execution — Combined batch validate + dev in a single Sonnet session.
-  Invoke with /ases-batch-exec [sprint-id] after /ases-tasks. Identifies all tasks whose
-  dependencies are satisfied and that are not already complete/deferred/escalated, validates
-  them, then implements them — all in one context window. Enforces all constraints from
-  /ases-validate and /ases-dev. Falls back to per-task mode for fix re-entry.
-allowed-tools: Read, Write, Bash(find:*), Bash(ls:*), Bash(psql:*)
+  ASES Sprint Execution — Orchestrates per-task sub-agent dispatch for validate + dev.
+  Invoke with /ases-batch-exec [sprint-id] after /ases-tasks. Identifies all eligible tasks,
+  groups by dependency order, and dispatches a worker-dev sub-agent for each task. Each worker
+  runs in an isolated context — reads only its own plan, LLD slice, and schema slice. Orchestrator
+  collects results, handles failures, and writes batch summary.
+allowed-tools: Read, Write, Bash(find:*), Bash(ls:*), Agent(worker-dev)
 argument-hint: "[sprint-id e.g. S1]"
 ---
 
 # ASES `/ases-batch-exec [sprint-id]`
-**Agent:** Execution (Sonnet / configured alternative) · **Scope:** Sprint batch
+**Agent:** Orchestrator (Execution) · **Scope:** Sprint batch · **Pattern:** Per-task sub-agent dispatch
 
 Parse: `SPRINT_ID` = argument.
 
@@ -32,73 +32,72 @@ If zero eligible tasks → report "No eligible tasks" → STOP.
 
 ---
 
-## Phase 1 — Batch Validate
+## Step 1 — Dispatch Per-Task Workers
 
-For EACH eligible task in the current batch, run ALL four validation checks
-(same constraints as `/ases-validate`):
+For each dependency group (process groups in topological order):
 
-### Four Checks (per task)
-1. `input_files_exist` — all files in `task.inputs.reads_from[]` exist
-2. `interface_contract_intact` — lld interface for this file not drifted
-3. `scope_boundary_clear` — task files don't overlap with in-progress tasks
-4. `no_circular_dependency` — all `depends_on[]` tasks are `status: complete`
+### Per Task in Group
 
-### Output (per task)
-Write `sprints/$SPRINT_ID/execution/validation_$TASK_ID.json`
+Dispatch sub-agent `worker-dev` with message:
 
-### HOLD Handling
-If any task gets HOLD:
-- Record the HOLD with `hold_reason` + `suggested_resolution`
-- **Skip that task in Phase 2** — do not stop the entire batch
-- Continue validating remaining tasks
-- Report all HOLDs at end of Phase 1
+```
+Implement task $TASK_ID for sprint $SPRINT_ID.
+Read your plan from sprints/$SPRINT_ID/execution/tasks/$TASK_ID-plan.json
+Follow the standard ASES worker-dev process.
+```
+
+**Platform dispatch:**
+- Claude Code: use the `Agent` tool → agent: `worker-dev`
+- Kilo Code: use the `new_task` tool → mode: `worker-dev`
+
+Each worker operates in an isolated context window. It reads only its own task's plan, LLD slice, schema slice, and decisions slice. It validates, implements, writes output files, and returns a result.
+
+### Dependency Handling
+
+- Tasks in the same `parallel_group[]` MAY be dispatched concurrently (where platform supports it)
+- Tasks in subsequent groups MUST wait for all prior groups to complete
+- Workers in a later group may read code written by workers in earlier groups (it exists on disk)
+
+### Worker Results
+
+Each worker returns exactly one of:
+- `CHECKOUT: Changed [files]. Tests: [pending].` → task succeeded
+- `HOLD: [reason]` → validation failed, task skipped
+- `ESCALATE: [reason]` → ambiguity or scope issue
+- `ERROR: [details]` → implementation or migration failure
+
+### Failure Handling
+
+- Worker timeout or error → retry ONCE with the same message
+- Second failure → mark task as `ESCALATE`, continue remaining tasks
+- HOLD tasks → record `hold_reason`, continue remaining tasks
 
 ---
 
-## Phase 2 — Batch Dev
+## Step 2 — Collect and Finalize
 
-For EACH task that received `verdict: PROCEED` in Phase 1, implement it
-(same constraints as `/ases-dev`):
+After all workers in all groups complete:
 
-### Per-Task Implementation
-1. **Read instruction packet**: `$TASK_ID-plan.json`, `$TASK_ID-plan.md`, `lld.json`,
-   `schema.json` (if DB task), `decisions.json` (relevant entries),
-   `ui_scaffold_manifest.json` (if UI task)
-2. **Extract and lock scope**: `output_files[]` is COMPLETE write scope — no other files
-3. **Write pre-dev snapshot**: `snapshots/$TASK_ID-pre.json`
-4. **Implement**: Follow plan.md pseudo-code exactly. Match lld signatures. No extras.
-5. **Migration execution** (if `output_files[]` contains `*.sql`):
-   Execute: `psql -U <db.app_role> -d <db.name> -f <migration_file>`
-   If fails → stop this task, report error, continue to next task
-6. **Update task status**: `in_progress` in tasks.json
-7. **Checkout summary**: `CHECKOUT: Changed [files]. Tests: [pending].`
+1. **Verify output files** — for each successful worker, confirm its expected output files exist on disk
+2. **Collect summaries** — gather all CHECKOUT / HOLD / ESCALATE / ERROR results
+3. **Update tasks.json** — set status for each task based on worker result:
+   - CHECKOUT → `in_progress`
+   - HOLD → `pending` (unchanged)
+   - ESCALATE → `escalated`
+   - ERROR → `escalated`
+4. **Write batch summary:**
 
-### Rules (enforced per task, same as /ases-dev)
-- Write ONLY to `output_files[]` — if fix needs out-of-scope file → ESCALATE
-- No architectural decisions — implement exactly what plan + lld specify
-- No assumptions — if ambiguous, flag ESCALATE
-- UI tasks: only declared `integration_points[]` — never touch scaffold structure
-
----
-
-## Output
-
-Per task:
 ```
-sprints/$SPRINT_ID/execution/validation_$TASK_ID.json
-sprints/$SPRINT_ID/execution/snapshots/$TASK_ID-pre.json
-Code written to output_files[]
-tasks.json status updated
-```
-
-Batch summary at end:
-```
-BATCH COMPLETE: [N] validated, [M] implemented, [H] HOLD, [E] ESCALATE
+BATCH COMPLETE: [N] validated+implemented, [H] HOLD, [E] ESCALATE, [R] ERROR
 HOLD tasks: [list with hold_reasons]
 ESCALATE tasks: [list with reasons]
+ERROR tasks: [list with details]
 ```
 
+---
+
 ## Step 3 — Update Knowledge Graph
+
 Run `graphify update .` to refresh the graph with newly implemented code.
 If context bracket is DEPLETED/CRITICAL, skip this step.
 

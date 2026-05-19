@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASES v3.1 — Command Centre</title>
+  <title>ASES v3.2 — Command Centre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap"
@@ -29,6 +29,9 @@
       --human: #a78bfa;
       --hd: rgba(167, 139, 250, 0.1);
       --hb: rgba(167, 139, 250, 0.22);
+      --worker: #06b6d4;
+      --kd: rgba(6, 182, 212, 0.1);
+      --kb: rgba(6, 182, 212, 0.22);
       --warn: #fbbf24;
       --wd: rgba(251, 191, 36, 0.08);
       --wb: rgba(251, 191, 36, 0.3);
@@ -1256,9 +1259,9 @@
       <div class="hero-main">
         <div class="hero-eye">AI Scrum Engineering System · Cross-Platform Edition</div>
         <div class="hero-title">A<em>S</em>ES<br>Command<br>Centre</div>
-        <div class="hero-desc">Three-level context architecture. CARL-inspired hooks. Batch execution mode.
+        <div class="hero-desc">Three-level context architecture. CARL-inspired hooks. Per-task sub-agent dispatch.
           Identifier-addressed global history. Phase 3 fix loops. Cross-platform (Claude Code + Kilo Code).
-          Model-agnostic 3-slot routing.</div>
+          Model-agnostic routing. 6 agents including worker-dev and worker-critic.</div>
         <div class="hero-stats">
           <div>
             <div class="stat-n">36</div>
@@ -1420,6 +1423,13 @@
           sign-off.</div>
         <div class="mc-tags"><span class="mc-tag">interview</span><span class="mc-tag">roadmap</span><span
             class="mc-tag">uat</span><span class="mc-tag">inject</span><span class="mc-tag">release</span></div>
+      </div>
+      <div class="mc" style="position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--worker);"></div>
+        <div class="mc-layer">Worker Layer</div>
+        <div class="mc-name" style="color:var(--worker);">Sub-Agents</div>
+        <div class="mc-role">Per-task isolated execution and critique via platform sub-agent tools (Agent on Claude Code, new_task on Kilo Code). Each worker gets a fresh context window.</div>
+        <div class="mc-tags"><span class="mc-tag" style="background:var(--kd);border-color:var(--kb);color:var(--worker);">worker-dev</span><span class="mc-tag" style="background:var(--kd);border-color:var(--kb);color:var(--worker);">worker-critic</span></div>
       </div>
     </div>
 
@@ -1623,18 +1633,18 @@
             <div class="parr">→</div>
           </div>
           <div class="ps">
-            <div class="pn sn">
+            <div class="pn" style="border-top-color:var(--worker);">
               <div class="pc">/batch-exec</div>
-              <div class="pa">Sonnet</div>
-              <div class="pg8">validate+dev</div>
+              <div class="pa" style="color:var(--worker);">Orch→Worker</div>
+              <div class="pg8">per-task sub-agents</div>
             </div>
             <div class="parr">→</div>
           </div>
           <div class="ps">
-            <div class="pn on">
+            <div class="pn" style="border-top-color:var(--worker);">
               <div class="pc">/batch-critique</div>
-              <div class="pa">Critic</div>
-              <div class="pg8">smart cap 3–5</div>
+              <div class="pa" style="color:var(--worker);">Orch→Worker</div>
+              <div class="pg8">per-task sub-agents</div>
             </div>
             <div class="parr">→</div>
           </div>
@@ -1817,10 +1827,11 @@
           settings.json <span class="comment">← hooks + model</span>
           hooks/ases-hook.py <span class="comment">← CARL-inspired</span>
           skills/ases-*/SKILL.md <span class="comment">← 36 skills</span>
-          agents/{planner,architect, <span class="comment">← agent defs</span>
-          critic,developer}.md
+          agents/{planner,architect, <span class="comment">← 6 agent defs</span>
+          critic,developer,
+          worker-dev,worker-critic}.md
           commands/ases-*.md <span class="comment">← utilities</span>
-          system.yaml <span class="comment">← 3-slot routing</span>
+          system.yaml <span class="comment">← model + sub-agent config</span>
 
           <span class="dir">/.kilo/</span> <span class="comment">← Kilo Code mirror</span>
           kilo.jsonc <span class="comment">← permissions</span>
@@ -1883,7 +1894,7 @@
     <div id="hook" class="sh">
       <div class="sl">ases-hook.py — CARL-Inspired</div>
       <div class="sline"></div>
-      <div class="sid">4 JOBS · PreToolUse</div>
+      <div class="sid">5 JOBS · PreToolUse</div>
     </div>
     <div class="hook-card">
       <div class="hk">
@@ -1909,8 +1920,13 @@
       <div class="hk">
         <div class="hk-title">Job 4 — UI Scaffold Guard</div>
         <div class="hk-desc">Blocks Write to frontend/ paths not declared in ui_scaffold_manifest integration_points[].
-          Gemini's scaffold is locked. Replaces guard_ui_scaffold.py. Combined with Jobs 1-3 in single hook.</div>
+          Gemini's scaffold is locked. Replaces guard_ui_scaffold.py. Combined with Jobs 1-4 in single hook.</div>
         <div class="hk-trigger">Trigger: Write to frontend/**</div>
+      </div>
+      <div class="hk">
+        <div class="hk-title">Job 5 — Sub-Agent Config</div>
+        <div class="hk-desc">Reads sub_agents section from system.yaml. When enabled, injects sub_agents=true context_window=N threshold=N into &lt;ases-state&gt; block. Skills use this to decide orchestration strategy.</div>
+        <div class="hk-trigger">Trigger: any ases-* command (when sub_agents.enabled)</div>
       </div>
     </div>
 
@@ -2107,8 +2123,8 @@
     <div class="footer">
       <div class="footer-truth">This is not prompting — this is an <span>AI software factory.</span></div>
       <div class="footer-meta">
-        ASES v3.1 · 36 Skills · 3 Context Levels · 6 ID Types · 13 Rules · 6 Gates<br>
-        Opus 4.7 · Sonnet 4.6 · Gemini 3.1 Pro · Human PO · Claude Code + Kilo Code
+        ASES v3.2 · 36 Skills · 6 Agents · 3 Context Levels · 6 ID Types · 13 Rules · 6 Gates<br>
+        Opus 4.7 · Sonnet 4.6 · Sub-Agents · Gemini 3.1 Pro · Human PO · Claude Code + Kilo Code
       </div>
     </div>
 

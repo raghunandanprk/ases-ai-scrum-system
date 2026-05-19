@@ -1,18 +1,21 @@
 ---
 name: ases-batch-critique
 description: >
-  ASES Sprint Execution — Batch critique for all dev'd tasks in a single Opus session.
+  ASES Sprint Execution — Orchestrates per-task sub-agent dispatch for critique.
   Invoke with /ases-batch-critique [sprint-id] after /ases-batch-exec or /ases-batch-dev.
-  Runs the full 4-lens critique on each in_progress task. CLEAN tasks marked complete.
-  FIX_REQUIRED tasks routed to per-task /ases-fix re-entry.
-allowed-tools: Read, Write
+  Identifies all in_progress tasks and dispatches a worker-critic sub-agent for each. Each
+  worker runs in an isolated context — reads only its task's code, plan, and LLD slice. Applies
+  5 critique lenses. Orchestrator collects verdicts and handles smart iteration cap.
+allowed-tools: Read, Write, Agent(worker-critic)
 argument-hint: "[sprint-id e.g. S1]"
 ---
 
 # ASES `/ases-batch-critique [sprint-id]`
-**Agent:** Reasoning (Opus / configured alternative) · **Scope:** Sprint batch · **Max iterations:** 3–5 (smart cap)
+**Agent:** Orchestrator (Reasoning) · **Scope:** Sprint batch · **Pattern:** Per-task sub-agent dispatch · **Max iterations:** 3–5 (smart cap)
 
 Parse: `SPRINT_ID` = argument.
+
+---
 
 ## Step 0 — Identify Dev'd Tasks
 
@@ -22,47 +25,56 @@ Eligible if:
 - Task `status` is `in_progress`
 - Corresponding code files in `output_files[]` exist (dev completed)
 
-## Step 1 — Critique Each Task
+If zero eligible tasks → report "No tasks to critique" → STOP.
 
-For each eligible task, apply the same four lenses as `/ases-critique`:
+---
 
-### 1 — Spec
-Does implementation match `plan.json`? Match lld function signatures + interfaces?
+## Step 1 — Dispatch Per-Task Critics
 
-### 2 — Contract
-Do exports match what other files expect (lld interfaces)?
-Are all imports from `depends_on[]` used correctly?
+For each eligible task, dispatch sub-agent `worker-critic` with message:
 
-### 3 — Test
-Does implementation satisfy `test_case.expected_output`?
-Are edge cases from `test_cases.json` handled?
+```
+Critique task $TASK_ID for sprint $SPRINT_ID.
+Read the implementation from the task's output_files[].
+Follow the standard ASES worker-critic process.
+```
 
-### 4 — Security
-Input validation, injection vectors, exposed secrets?
+**Platform dispatch:**
+- Claude Code: use the `Agent` tool → agent: `worker-critic`
+- Kilo Code: use the `new_task` tool → mode: `worker-critic`
 
-### 5 — Structural (if `graphify-out/graph.json` exists)
-Call graph connectivity, orphan detection, dead imports.
-Run `graphify query` once for the batch — not per-task.
-Skip if context bracket is DEPLETED/CRITICAL.
+Each worker operates in an isolated context window. It reads the task's code, plan, LLD slice, decisions slice, and test cases. It applies all 5 critique lenses and writes critique JSON+MD.
 
-## Rules
-- Read `decisions.json` FIRST — set `is_adr_tradeoff: true` for known decisions
-- Detection only — no rewrites
-- `fix_instruction` must be specific + actionable
+### Worker Results
 
-## Verdicts (per task)
+Each worker returns exactly one of:
+- `VERDICT: CLEAN — [summary]` → no issues found
+- `VERDICT: FIX_REQUIRED — [N] issues` → critique written, fix needed
+- `VERDICT: ESCALATE — [reason]` → iteration cap or stalling
 
-- **CLEAN** → update `tasks.json` status → `complete` → update `context.json`
-- **FIX_REQUIRED** → write critique JSON → route to per-task `/ases-fix $TASK_ID $SPRINT_ID`
-- **ESCALATE** → see smart cap rules below
+---
 
-## Smart Iteration Cap
+## Step 2 — Collect Verdicts and Update State
+
+After all workers complete:
+
+### Per Task
+
+- **CLEAN** → update `tasks.json` status → `complete` → update `.ases/context.json`
+- **FIX_REQUIRED** → critique files written by worker → route to per-task `/ases-fix $TASK_ID $SPRINT_ID`
+- **ESCALATE** → present to PO with structured options (see below)
+
+### Smart Iteration Cap (tracked by orchestrator)
+
+The orchestrator tracks iteration count across critique cycles. These rules apply when `/ases-batch-critique` is re-run after `/ases-fix`:
+
 ```
 iteration ≥ 3 AND FIX_REQUIRED AND issues_remaining ≥ previous_issues → ESCALATE
 iteration ≥ 5 → ESCALATE (hard cap regardless of progress)
 ```
 
-## ESCALATE Handling
+### ESCALATE Handling
+
 Present to PO with structured options:
 1. **Accept with tech debt** → mark complete, log TD entry in decisions.json
 2. **Rollback** → `/ases-rollback $TASK_ID $SPRINT_ID` → task returns to pending
@@ -70,20 +82,18 @@ Present to PO with structured options:
 4. **Defer** → mark deferred, create CF entry in global_context.json
 5. **PRD issue** → `/ases-prd-update` next sprint
 
-## Output
-Per task:
-```
-sprints/$SPRINT_ID/execution/critique_$TASK_ID.json   ← schema: format/json/critique.schema.json
-sprints/$SPRINT_ID/execution/critique_$TASK_ID.md
-```
+---
 
-Batch summary:
+## Step 3 — Write Batch Summary
+
 ```
 BATCH CRITIQUE: [C] CLEAN, [F] FIX_REQUIRED, [E] ESCALATE
 CLEAN: [list] → marked complete
 FIX_REQUIRED: [list] → route to /ases-fix per task
 ESCALATE: [list] → PO decision required
 ```
+
+---
 
 ## Next Step
 All CLEAN → `/ases-sprint-close $SPRINT_ID`

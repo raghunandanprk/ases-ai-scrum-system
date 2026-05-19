@@ -66,7 +66,7 @@ The primary execution mode is **batch**:
 /ases-batch-exec → /ases-batch-critique → /ases-fix (per task, if needed)
 ```
 
-Batch-exec combines validation and implementation in a single Sonnet session. Batch-critique runs all 5 lenses across every completed task. This saves significant token overhead compared to per-task invocations.
+Batch-exec orchestrates per-task sub-agent dispatch — each task runs in an isolated context window via the platform's sub-agent tool (`Agent` on Claude Code, `new_task` on Kilo Code). Batch-critique does the same for the 5-lens critique pass. This provides context isolation, granular failure handling, and parallelism.
 
 For targeted re-entry or individual tasks, the **per-task fallback** works:
 
@@ -151,6 +151,7 @@ This means lean context is always available without token waste, sprint context 
 |------|-------|-------|
 | Reasoning | Opus 4.7 | Planning, architecture, critique, test design |
 | Execution | Sonnet 4.6 | Code generation, fixes, scaffolding, test implementation, validation |
+| Worker | Sub-agent | Per-task isolated execution (worker-dev) and critique (worker-critic) |
 | UI | Gemini 3.1 Pro | UI spec + Next.js/React scaffold |
 | Decision | Human (PO) | 6 mandatory approval gates per sprint |
 
@@ -192,10 +193,10 @@ All models are configurable via `system.yaml`. Sonnet never touches the Gemini U
 | `/ases-dev` | Sonnet | Single-task implementation |
 | `/ases-critique` | Opus | 5-lens critique (spec, contract, test, security, structural) |
 | `/ases-fix` | Sonnet | Targeted fix from critique findings |
-| `/ases-batch-exec` | Sonnet | Combined validate+dev batch + graphify update |
+| `/ases-batch-exec` | Orchestrator→Worker | Per-task sub-agent validate+dev dispatch + graphify update |
 | `/ases-batch-validate` | Sonnet | Standalone batch validation |
 | `/ases-batch-dev` | Sonnet | Standalone batch implementation |
-| `/ases-batch-critique` | Opus | Batch 5-lens critique for all completed tasks |
+| `/ases-batch-critique` | Orchestrator→Worker | Per-task sub-agent 5-lens critique dispatch |
 | `/ases-sprint-close` | Opus | Graphify update + close sprint, produce carry-forwards |
 
 ### Sprint Ship — Phase 3 (7 skills)
@@ -230,8 +231,9 @@ All models are configurable via `system.yaml`. Sonnet never touches the Gemini U
 /.claude/                        ← Claude Code platform
   hooks/ases-hook.py                 CARL-inspired context hook
   skills/ases-*/SKILL.md             36 skills
-  agents/{planner,architect,         Agent role definitions
-    critic,developer}.md
+  agents/{planner,architect,         Agent role definitions (6 total)
+    critic,developer,
+    worker-dev,worker-critic}.md
   system.yaml                       Model + context config
 
 /.kilo/                          ← Kilo Code platform (mirror)
@@ -374,4 +376,4 @@ Inspired by ideas from [Claude-Mem](https://github.com/thedotmack/claude-mem) (m
 
 ---
 
-*ASES v3.1 · 36 skills · 3 context levels · 13 rules · 6 gates · Claude Code + Kilo Code*
+*ASES v3.2 · 36 skills · 6 agents · 3 context levels · 13 rules · 6 gates · Claude Code + Kilo Code*

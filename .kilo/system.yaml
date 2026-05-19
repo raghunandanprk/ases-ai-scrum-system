@@ -1,4 +1,4 @@
-# ASES v3.1 — System Configuration
+# ASES v3.2 — System Configuration
 
 models:
   reasoning:                                # Opus role: planning, design, critique
@@ -52,3 +52,9 @@ po_only_files:
   - docs/prd.md
   - docs/roadmap.md
   - docs/hld.md
+
+sub_agents:
+  enabled: true                              # master toggle for sub-agent dispatch
+  context_window: 200000                     # actual context window of the model you're running
+                                             # set to your local model's limit (e.g. 16384)
+  threshold: 12000                           # Tier 2 skills decompose when input > threshold
