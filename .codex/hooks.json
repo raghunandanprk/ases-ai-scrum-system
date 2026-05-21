@@ -1,0 +1,22 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "script": ".codex/hooks/ases-guard.sh",
+      "statusMessage": "[ASES] Checking command safety..."
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "apply_patch",
+      "script": ".codex/hooks/ases-guard.sh",
+      "statusMessage": "[ASES] Checking write permissions..."
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "Read",
+      "script": ".codex/hooks/ases-guard.sh",
+      "statusMessage": "[ASES] Checking file access..."
+    }
+  ]
+}

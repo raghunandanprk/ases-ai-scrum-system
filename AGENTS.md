@@ -48,7 +48,10 @@ IDs: `SP-` sprint · `DS-` decision · `TD-` debt · `FT-` feature · `RI-` risk
 ## Structure
 ```
 /.ases/          state (context, sprint_context, decisions, global_context)
+/.claude/        skills(36), agents(6), hooks, system.yaml
 /.kilo/          skills(36), agents(6), plugin, rules, system.yaml
+/.codex/         skills(36), hooks, config.toml, system.yaml
+/.github/agents/ 6 agents in .agent.md format (Codex / VS Code)
 /format/         schemas + templates (excluded)
 /docs/           PO docs (excluded)
 /contracts/      agent JSON contracts (excluded)
@@ -77,4 +80,4 @@ IDs: `SP-` sprint · `DS-` decision · `TD-` debt · `FT-` feature · `RI-` risk
 1. After `/roadmap` · 2. After `/sprint-gate` PASS · 3. Any `ESCALATE`
 4. `/uat` PO review · 5. After `/final-audit` SHIP · 6. Any `BLOCK`
 
-*ASES v3.2 · 36 skills · 6 agents · 3 context levels · 13 rules · 6 gates*
+*ASES v3.2 · 36 skills · 6 agents · 3 context levels · 13 rules · 6 gates · Claude Code + Kilo Code + OpenAI Codex*

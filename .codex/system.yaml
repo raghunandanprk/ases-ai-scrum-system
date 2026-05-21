@@ -1,0 +1,60 @@
+# ASES v3.2 — System Configuration
+
+models:
+  reasoning:                                # Opus role: planning, design, critique
+    primary: claude-opus-4-7
+    alternative: null                       # set to e.g. "glm-5.1" to replace Opus entirely
+  execution:                                # Sonnet role: dev, fix, scaffold, tests, validate
+    primary: claude-sonnet-4-6
+    alternative: null                       # set to e.g. "minimax-m2.7"
+  ui:                                       # Gemini role: UI spec + scaffold
+    primary: gemini-3.1-pro
+    alternative: null                       # set to e.g. "gpt-4.1-vision"
+  decision: human                           # PO gates — always human
+
+context_levels:
+  lean:
+    file: .ases/context.json
+    loaded_by: hook_always
+    max_fields: 8
+    fields: [project, sprint, phase, stage, last_completed, next, blockers, prd_version]
+  sprint:
+    file: .ases/sprint_context.json
+    loaded_by: hook_active_sprint
+    written_by: ases-sprint-gate
+    cleared_by: ases-sprint-close
+  global:
+    file: .ases/global_context.json
+    loaded_by: explicit_only
+    commands: [ases-inject, ases-release, ases-prd-update, ases-context, ases-gc]
+    id_prefixes: [SP, DS, TD, FT, RI, CF]
+
+hard_rules:
+  - JSON_and_MD_dual_format_every_document
+  - output_files_list_is_complete_write_scope
+  - critique_loop_smart_cap_max_5_iterations
+  - no_agent_role_overlap
+  - scaffold_spec_json_gates_execution
+  - ui_scaffold_locked_after_creation
+  - commit_only_after_uat_approval
+  - every_tradeoff_produces_typed_ADR_entry
+  - test_cases_derived_from_AC_never_invented
+  - test_naming_convention_test_tcid_description
+  - test_run_required_before_integration_test
+  - sprint_close_blocks_on_in_progress_tasks
+  - phase3_fix_loop_max_3_iterations
+
+po_only_files:
+  - .ases/decisions.json
+  - .ases/decisions.md
+  - .ases/global_context.json
+  - .ases/global_context.md
+  - docs/prd.md
+  - docs/roadmap.md
+  - docs/hld.md
+
+sub_agents:
+  enabled: true                              # master toggle for sub-agent dispatch
+  context_window: 200000                     # actual context window of the model you're running
+                                             # set to your local model's limit (e.g. 16384)
+  threshold: 12000                           # Tier 2 skills decompose when input > threshold

@@ -1,0 +1,18 @@
+# ASES v3.2 — OpenAI Codex Project Configuration
+# Equivalent to .claude/settings.json (Claude Code) and .kilo/kilo.jsonc (Kilo Code)
+
+[model]
+default = "gpt-5.5"
+
+[features]
+codex_hooks = true
+
+[approval]
+# "suggest" | "auto-edit" | "full-auto"
+# Use "suggest" for safety — agent proposes, human approves
+mode = "suggest"
+
+[sandbox]
+# Codex uses native Windows sandbox
+# Network access disabled by default for security
+allow_network = false

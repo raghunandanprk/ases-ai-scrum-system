@@ -1197,7 +1197,7 @@
   <div class="tb">
     <div class="tb-brand">
       <div class="tb-logo">A<span>S</span>ES</div>
-      <div class="tb-v">v3.1</div>
+      <div class="tb-v">v3.2</div>
     </div>
     <nav class="tb-nav">
       <a href="#context" class="nv">Context</a>
@@ -1260,7 +1260,7 @@
         <div class="hero-eye">AI Scrum Engineering System · Cross-Platform Edition</div>
         <div class="hero-title">A<em>S</em>ES<br>Command<br>Centre</div>
         <div class="hero-desc">Three-level context architecture. CARL-inspired hooks. Per-task sub-agent dispatch.
-          Identifier-addressed global history. Phase 3 fix loops. Cross-platform (Claude Code + Kilo Code).
+          Identifier-addressed global history. Phase 3 fix loops. Cross-platform (Claude Code + Kilo Code + OpenAI Codex).
           Model-agnostic routing. 6 agents including worker-dev and worker-critic.</div>
         <div class="hero-stats">
           <div>
@@ -1428,7 +1428,7 @@
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--worker);"></div>
         <div class="mc-layer">Worker Layer</div>
         <div class="mc-name" style="color:var(--worker);">Sub-Agents</div>
-        <div class="mc-role">Per-task isolated execution and critique via platform sub-agent tools (Agent on Claude Code, new_task on Kilo Code). Each worker gets a fresh context window.</div>
+        <div class="mc-role">Per-task isolated execution and critique via platform sub-agent tools (Agent on Claude Code, new_task on Kilo Code, runSubagent on Codex). Each worker gets a fresh context window.</div>
         <div class="mc-tags"><span class="mc-tag" style="background:var(--kd);border-color:var(--kb);color:var(--worker);">worker-dev</span><span class="mc-tag" style="background:var(--kd);border-color:var(--kb);color:var(--worker);">worker-critic</span></div>
       </div>
     </div>
@@ -1838,6 +1838,16 @@
           plugin/ases-guard.ts <span class="comment">← TS hook port</span>
           skills/ agents/ rules/ <span class="comment">← same 36 skills</span>
 
+          <span class="dir">/.codex/</span> <span class="comment">← OpenAI Codex (desktop / VS Code)</span>
+          config.toml <span class="comment">← project config (TOML)</span>
+          hooks.json <span class="comment">← hook registration</span>
+          hooks/ases-guard.sh <span class="comment">← Bash hook port</span>
+          hooks/ases-guard.ps1 <span class="comment">← PowerShell (Windows)</span>
+          skills/ <span class="comment">← same 36 skills</span>
+
+          <span class="dir">/.github/agents/</span> <span class="comment">← VS Code / Codex agents</span>
+          *.agent.md <span class="comment">← 6 agents (.agent.md format)</span>
+
           <span class="dir">/format/</span>
           json/*.schema.json <span class="comment">← excluded from scan</span>
           markdown/*.template.md <span class="comment">← excluded from scan</span>
@@ -1845,7 +1855,7 @@
           .claudeignore <span class="comment">← Claude Code</span>
           .kilocodeignore <span class="comment">← Kilo Code</span>
           CLAUDE.md <span class="comment">← always-loaded</span>
-          AGENTS.md <span class="comment">← Kilo equivalent</span>
+          AGENTS.md <span class="comment">← Kilo + Codex</span>
         </div>
       </div>
       <div class="folder-card">
@@ -1892,9 +1902,9 @@
 
     <!-- CARL-Inspired Hook -->
     <div id="hook" class="sh">
-      <div class="sl">ases-hook.py — CARL-Inspired</div>
+      <div class="sl">ASES Guard — CARL-Inspired (3 Platforms)</div>
       <div class="sline"></div>
-      <div class="sid">5 JOBS · PreToolUse</div>
+      <div class="sid">5 JOBS · PreToolUse · Python + TypeScript + Bash + PowerShell</div>
     </div>
     <div class="hook-card">
       <div class="hk">
@@ -2092,7 +2102,7 @@
       </div>
       <div class="rc">
         <div class="rc-n">07</div>
-        <div class="rc-t">Git commit only after UAT approval — ases-hook.py / ases-guard.ts enforces at system level</div>
+        <div class="rc-t">Git commit only after UAT approval — ases-hook.py / ases-guard.ts / ases-guard.sh+ps1 enforces at system level</div>
       </div>
       <div class="rc">
         <div class="rc-n">08</div>
@@ -2124,7 +2134,7 @@
       <div class="footer-truth">This is not prompting — this is an <span>AI software factory.</span></div>
       <div class="footer-meta">
         ASES v3.2 · 36 Skills · 6 Agents · 3 Context Levels · 6 ID Types · 13 Rules · 6 Gates<br>
-        Opus 4.7 · Sonnet 4.6 · Sub-Agents · Gemini 3.1 Pro · Human PO · Claude Code + Kilo Code
+        Opus 4.7 · Sonnet 4.6 · Sub-Agents · Gemini 3.1 Pro · Human PO · Claude Code + Kilo Code + OpenAI Codex
       </div>
     </div>
 

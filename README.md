@@ -2,7 +2,7 @@
 
 > *This is not prompting. This is an AI software factory.*
 
-ASES is a structured, Scrum-based engineering system that runs inside **Claude Code** and **Kilo Code**. It turns an open-ended AI session into a disciplined delivery pipeline — with defined roles, schema-validated outputs, human approval gates, hook-based context injection, and knowledge-graph-assisted code analysis — from first idea to production release.
+ASES is a structured, Scrum-based engineering system that runs inside **Claude Code**, **Kilo Code**, and **OpenAI Codex**. It turns an open-ended AI session into a disciplined delivery pipeline — with defined roles, schema-validated outputs, human approval gates, hook-based context injection, and knowledge-graph-assisted code analysis — from first idea to production release.
 
 ---
 
@@ -40,7 +40,7 @@ ASES is neither. It is a three-phase sprint engine with:
 - **6 human approval gates per sprint** — the Product Owner is part of the system, not an afterthought
 - **A typed architectural decision log** (`decisions.json`) — every tradeoff gets a permanent `DS-NNN` ID
 - **Multi-model routing** — Opus for planning and critique, Sonnet for execution, Gemini for UI scaffolding
-- **Cross-platform** — runs identically on Claude Code and Kilo Code
+- **Cross-platform** — runs identically on Claude Code, Kilo Code, and OpenAI Codex
 
 ---
 
@@ -66,7 +66,7 @@ The primary execution mode is **batch**:
 /ases-batch-exec → /ases-batch-critique → /ases-fix (per task, if needed)
 ```
 
-Batch-exec orchestrates per-task sub-agent dispatch — each task runs in an isolated context window via the platform's sub-agent tool (`Agent` on Claude Code, `new_task` on Kilo Code). Batch-critique does the same for the 5-lens critique pass. This provides context isolation, granular failure handling, and parallelism.
+Batch-exec orchestrates per-task sub-agent dispatch — each task runs in an isolated context window via the platform's sub-agent tool (`Agent` on Claude Code, `new_task` on Kilo Code, `runSubagent` on Codex). Batch-critique does the same for the 5-lens critique pass. This provides context isolation, granular failure handling, and parallelism.
 
 For targeted re-entry or individual tasks, the **per-task fallback** works:
 
@@ -80,7 +80,7 @@ Above both loops, a full sprint flows through three phases:
 
 **Phase 2 — Execution:** Analyze, scaffold, build (batch or per-task), critique, fix. UI tasks go through a separate Gemini-driven path. Knowledge graph is auto-updated at key pipeline points.
 
-**Phase 3 — Ship:** Unit → test-run → integration → system → UAT → DevOps → final audit → release. Fix loops capped at 3 iterations per failing stage. Git commits only happen after UAT approval, enforced by `ases-hook.py` (Claude) / `ases-guard.ts` (Kilo).
+**Phase 3 — Ship:** Unit → test-run → integration → system → UAT → DevOps → final audit → release. Fix loops capped at 3 iterations per failing stage. Git commits only happen after UAT approval, enforced by `ases-hook.py` (Claude) / `ases-guard.ts` (Kilo) / `ases-guard.sh` + `ases-guard.ps1` (Codex).
 
 ---
 
@@ -242,6 +242,20 @@ All models are configurable via `system.yaml`. Sonnet never touches the Gemini U
   kilo.jsonc                         Permissions config
   system.yaml                       Same model config
 
+/.codex/                         ← OpenAI Codex platform (desktop / VS Code)
+  hooks/ases-guard.sh                Bash hook port
+  hooks/ases-guard.ps1               PowerShell hook port (Windows)
+  hooks.json                         Hook registration
+  config.toml                        Project config (TOML)
+  AGENTS.md                          Codex-specific instructions
+  skills/ases-*/SKILL.md             Same 36 skills
+  system.yaml                        Same model config
+
+/.github/agents/                 ← VS Code / Codex agent definitions
+  {architect,developer,              6 agents in .agent.md format
+   critic,planner,
+   worker-dev,worker-critic}.agent.md
+
 /format/                         ← ASES schemas + templates (excluded from scan)
 /docs/                           ← PO documents (excluded from scan)
 /contracts/                      ← Machine-readable JSON contracts (excluded)
@@ -325,27 +339,43 @@ cp ases-ai-scrum-system/.kilocodeignore your-project/
 /ases-interview
 ```
 
-Both platforms share `.ases/`, `format/`, `contracts/`, `docs/`, and `sprints/`. Copy those too for a full setup, or let `/ases-init` create them.
+### OpenAI Codex (Desktop / VS Code)
+
+```bash
+# 1. Copy ASES into your project
+cp -r ases-ai-scrum-system/.codex your-project/
+cp -r ases-ai-scrum-system/.github your-project/
+cp ases-ai-scrum-system/AGENTS.md your-project/
+
+# 2. Open in Codex desktop app or VS Code with Codex extension
+# 3. Trust the project when prompted
+# 4. Start
+/ases-interview
+```
+
+All platforms share `.ases/`, `format/`, `contracts/`, `docs/`, and `sprints/`. Copy those too for a full setup, or let `/ases-init` create them.
 
 ---
 
 ## Platform Support
 
-| Platform | Config File | Hook | Status |
-|----------|-------------|------|--------|
-| Claude Code | `CLAUDE.md` + `.claude/` | `ases-hook.py` (Python) | ✅ Full |
-| Kilo Code | `AGENTS.md` + `.kilo/` | `ases-guard.ts` (TypeScript) | ✅ Full |
+| Platform | Config File | Hook | Sub-Agent Tool | Status |
+|----------|-------------|------|----------------|--------|
+| Claude Code | `CLAUDE.md` + `.claude/` | `ases-hook.py` (Python) | `Agent` | ✅ Full |
+| Kilo Code | `AGENTS.md` + `.kilo/` | `ases-guard.ts` (TypeScript) | `new_task` | ✅ Full |
+| OpenAI Codex | `AGENTS.md` + `.codex/` + `.github/agents/` | `ases-guard.sh` / `ases-guard.ps1` | `runSubagent` | ✅ Full |
 
-Skills, agents, and system.yaml are identical across platforms. Only the hook mechanism and platform config differ.
+Skills, agents, and system.yaml are identical across platforms. Only the hook mechanism, agent format, and platform config differ.
 
 ---
 
 ## Requirements
 
-- **Claude Code** or **Kilo Code** — ASES runs inside either
+- **Claude Code**, **Kilo Code**, or **OpenAI Codex** — ASES runs inside any of these
 - **Git** — enforced at release gate
 - **Graphify** (optional) — `pip install graphifyy` for knowledge graph features
 - **Gemini access** (optional) — required for UI scaffold path only
+- **jq** (Codex only, optional) — required for Bash hook on non-Windows; PowerShell hook has no external deps
 
 ---
 
@@ -376,4 +406,4 @@ Inspired by ideas from [Claude-Mem](https://github.com/thedotmack/claude-mem) (m
 
 ---
 
-*ASES v3.2 · 36 skills · 6 agents · 3 context levels · 13 rules · 6 gates · Claude Code + Kilo Code*
+*ASES v3.2 · 36 skills · 6 agents · 3 context levels · 13 rules · 6 gates · Claude Code + Kilo Code + OpenAI Codex*
