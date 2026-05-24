@@ -6,6 +6,7 @@ description: >
   Applies 5 critique lenses. Returns verdict: CLEAN, FIX_REQUIRED, or ESCALATE.
   Invoked by /ases-batch-critique orchestrator via new_task tool.
 mode: subagent
+model: opencode-go/glm-5.1  # role: reasoning → system.yaml
 permission:
   edit: allow
   bash: deny

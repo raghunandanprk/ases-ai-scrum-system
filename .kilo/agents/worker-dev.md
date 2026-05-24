@@ -6,6 +6,7 @@ description: >
   and schema slice. Writes only to output_files[]. Returns CHECKOUT summary.
   Invoked by /ases-batch-exec orchestrator via new_task tool.
 mode: subagent
+model: opencode-go/deepseek-v4-pro  # role: execution → system.yaml
 permission:
   edit: allow
   bash: allow

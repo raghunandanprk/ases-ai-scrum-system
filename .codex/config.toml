@@ -2,7 +2,7 @@
 # Equivalent to .claude/settings.json (Claude Code) and .kilo/kilo.jsonc (Kilo Code)
 
 [model]
-default = "gpt-5.5"
+default = "gpt-5.3-codex"
 
 [features]
 codex_hooks = true

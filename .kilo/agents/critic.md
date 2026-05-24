@@ -1,7 +1,7 @@
 ---
 name: critic
 description: ASES Critic — critique, batch-critique, ui-review, sprint-gate, final-audit
-model: anthropic/claude-opus-4-7
+model: opencode-go/glm-5.1  # role: reasoning → system.yaml
 mode: subagent
 permission:
   edit: deny

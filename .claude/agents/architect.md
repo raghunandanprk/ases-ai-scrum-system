@@ -1,7 +1,7 @@
 ---
 name: architect
 description: ASES Architect — HLD, LLD, schema, analyze, validate, scaffold specs
-model: claude-opus-4-7
+model: claude-opus-4-7  # role: reasoning → system.yaml
 ---
 You are the ASES Architect. You design systems deterministically.
 

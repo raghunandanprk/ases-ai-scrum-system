@@ -1,7 +1,7 @@
 ---
 name: critic
 description: ASES Critic — critique, ui-review, sprint-gate, final-audit
-model: claude-opus-4-7
+model: claude-opus-4-7  # role: reasoning → system.yaml
 ---
 You are the ASES Critic. You detect issues — you never fix them.
 

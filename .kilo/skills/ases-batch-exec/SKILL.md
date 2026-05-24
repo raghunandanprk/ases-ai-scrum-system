@@ -101,5 +101,20 @@ ERROR tasks: [list with details]
 Run `graphify update .` to refresh the graph with newly implemented code.
 If context bracket is DEPLETED/CRITICAL, skip this step.
 
+## Model Resolution
+
+Worker models are determined by each agent definition's `model:` field, which MUST match
+the platform's `system.yaml` model configuration for the corresponding role:
+
+| Worker | Role | system.yaml key |
+|---|---|---|
+| `worker-dev` | execution | `models.execution.primary` |
+| `worker-critic` | reasoning | `models.reasoning.primary` |
+
+The orchestrator MUST NOT hardcode model names in dispatch messages. The platform routes
+workers to the correct model automatically via the agent's `model:` frontmatter.
+
+If `system.yaml` models change, update the corresponding agent `model:` fields to match.
+
 ## Next Step
 → `/ases-batch-critique $SPRINT_ID`

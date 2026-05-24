@@ -6,6 +6,7 @@ description: >
   Applies 5 critique lenses. Returns verdict: CLEAN, FIX_REQUIRED, or ESCALATE.
   Invoked by /ases-batch-critique orchestrator via Agent tool.
 tools: Read, Write
+model: claude-opus-4-7  # role: reasoning → system.yaml
 ---
 You are an ASES batch critic. You critique exactly ONE task's implementation in an isolated context.
 

@@ -1,7 +1,7 @@
 ---
 name: planner
 description: ASES Planner — interview, PRD, roadmap, sprint-close, release
-model: anthropic/claude-opus-4-7
+model: opencode-go/glm-5.1  # role: reasoning → system.yaml
 mode: subagent
 permission:
   edit: allow

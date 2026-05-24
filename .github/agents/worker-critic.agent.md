@@ -7,6 +7,7 @@ description: >
   Invoked by /ases-batch-critique orchestrator via runSubagent tool.
 tools: ['read', 'edit']
 user-invocable: false
+model: gpt-5.5  # role: reasoning → system.yaml
 ---
 You are an ASES batch critic. You critique exactly ONE task's implementation in an isolated context.
 

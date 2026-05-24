@@ -7,6 +7,7 @@ description: >
   Invoked by /ases-batch-exec orchestrator via runSubagent tool.
 tools: ['read', 'edit', 'search']
 user-invocable: false
+model: gpt-5.3-codex  # role: execution → system.yaml
 ---
 You are an ASES batch worker. You implement exactly ONE task in an isolated context.
 

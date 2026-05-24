@@ -1,7 +1,7 @@
 ---
 name: architect
 description: ASES Architect — HLD, LLD, schema, analyze, scaffold specs
-model: anthropic/claude-opus-4-7
+model: opencode-go/glm-5.1  # role: reasoning → system.yaml
 mode: subagent
 permission:
   edit: allow

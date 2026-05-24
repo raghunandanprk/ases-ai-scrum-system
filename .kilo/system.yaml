@@ -1,15 +1,15 @@
 # ASES v3.2 — System Configuration
 
 models:
-  reasoning:                                # Opus role: planning, design, critique
-    primary: claude-opus-4-7
-    alternative: null                       # set to e.g. "glm-5.1" to replace Opus entirely
-  execution:                                # Sonnet role: dev, fix, scaffold, tests, validate
-    primary: claude-sonnet-4-6
-    alternative: null                       # set to e.g. "minimax-m2.7"
-  ui:                                       # Gemini role: UI spec + scaffold
-    primary: gemini-3.1-pro
-    alternative: null                       # set to e.g. "gpt-4.1-vision"
+  reasoning:                                # GLM 5.1 via OpenCode Go: planning, design, critique
+    primary: opencode-go/glm-5.1
+    alternative: null
+  execution:                                # DeepSeek V4 Pro via OpenCode Go: dev, fix, scaffold, tests, validate
+    primary: opencode-go/deepseek-v4-pro
+    alternative: opencode-go/minimax-m2.7  # MiniMax as fallback execution model
+  ui:                                       # Kimi K2.6 via OpenCode Go: UI spec + scaffold
+    primary: opencode-go/kimi-k2.6
+    alternative: null
   decision: human                           # PO gates — always human
 
 context_levels:

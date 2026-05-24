@@ -6,12 +6,15 @@ Obey all `<ases-state>` blocks injected by `ases-hook.py`. They are live project
 <!-- END ASES-MANAGED -->
 
 ## Models
-| Role | Model | Tasks |
+| Role | Default (Claude Code) | Tasks |
 |---|---|---|
 | Reasoning | Opus 4.7 | Plan, architect, critique, test design |
 | Execution | Sonnet 4.6 | Code, fix, scaffold, test, validate |
 | UI | Gemini 3.1 Pro | UI spec + scaffold |
 | Decision | Human (PO) | 6 gates per sprint |
+
+> Model IDs are platform-specific — see each platform's `system.yaml`.
+> Kilo Code (via OpenCode Go): GLM 5.1 / DeepSeek V4 Pro / Kimi K2.6 · Codex: GPT 5.5 / GPT 5.3 Codex
 
 ## Pipeline
 

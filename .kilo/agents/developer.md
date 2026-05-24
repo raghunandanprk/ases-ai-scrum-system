@@ -1,7 +1,7 @@
 ---
 name: developer
 description: ASES Developer — scaffold Step B, sprint-scaffold Step B, dev, fix, devops, test-impl
-model: anthropic/claude-sonnet-4-6
+model: opencode-go/deepseek-v4-pro  # role: execution → system.yaml
 mode: subagent
 permission:
   edit: allow

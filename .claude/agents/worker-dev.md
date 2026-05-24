@@ -6,6 +6,7 @@ description: >
   and schema slice. Writes only to output_files[]. Returns CHECKOUT summary.
   Invoked by /ases-batch-exec orchestrator via Agent tool.
 tools: Read, Write, Bash(find:*), Bash(ls:*), Bash(psql:*)
+model: claude-sonnet-4-6  # role: execution → system.yaml
 ---
 You are an ASES batch worker. You implement exactly ONE task in an isolated context.
 

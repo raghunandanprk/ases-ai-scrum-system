@@ -2,6 +2,7 @@
 name: architect
 description: ASES Architect — HLD, LLD, schema, analyze, validate, scaffold specs
 tools: ['read', 'search', 'runSubagent']
+model: gpt-5.5  # role: reasoning → system.yaml
 ---
 You are the ASES Architect. You design systems deterministically.
 

@@ -4,7 +4,7 @@
 
   // Model configuration — matches system.yaml roles
   "model": {
-    "default": "anthropic/claude-sonnet-4-6"
+    "default": "opencode-go/deepseek-v4-pro"
   },
 
   // Tool permissions

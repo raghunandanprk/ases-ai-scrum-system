@@ -1,15 +1,15 @@
 # ASES v3.2 — System Configuration
 
 models:
-  reasoning:                                # Opus role: planning, design, critique
-    primary: claude-opus-4-7
-    alternative: null                       # set to e.g. "glm-5.1" to replace Opus entirely
-  execution:                                # Sonnet role: dev, fix, scaffold, tests, validate
-    primary: claude-sonnet-4-6
-    alternative: null                       # set to e.g. "minimax-m2.7"
-  ui:                                       # Gemini role: UI spec + scaffold
-    primary: gemini-3.1-pro
-    alternative: null                       # set to e.g. "gpt-4.1-vision"
+  reasoning:                                # GPT 5.5: planning, design, critique
+    primary: gpt-5.5
+    alternative: null
+  execution:                                # GPT 5.3 Codex: dev, fix, scaffold, tests, validate
+    primary: gpt-5.3-codex
+    alternative: gpt-5.5                   # fallback to GPT 5.5 for complex execution
+  ui:                                       # GPT 5.5: UI spec + scaffold
+    primary: gpt-5.5
+    alternative: null
   decision: human                           # PO gates — always human
 
 context_levels:
